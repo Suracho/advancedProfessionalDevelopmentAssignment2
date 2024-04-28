@@ -1,12 +1,11 @@
 package com.example.assignment2.controllers;
 
-import com.example.assignment2.models.Person;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.sqlite.JDBC;
 
 import java.io.IOException;
@@ -20,23 +19,25 @@ public class BurritoKingApplication extends Application {
 
     private static final String location = BurritoKingApplication.class.getResource("/com.example.assignment2.database/database.db").toExternalForm();
 
-
     @Override
     public void start(Stage stage) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("BurritoKing-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Image icon = new Image("file:src/BurritoKing.png");
+
+//        // Set the stage style to transparent
         stage.getIcons().add(icon);
         stage.setTitle("Burrito King 🌯🌯🌯🌯");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
+
     }
 
 
     public static void main(String[] args) {
         checkDrivers();
         Connection connection = connect();
-//        updatePersonsFromDB();
         launch();
     }
 
@@ -55,6 +56,7 @@ public class BurritoKingApplication extends Application {
         return connection;
     }
 
+    //checks for the driver and then registers it
     private static boolean checkDrivers() {
         try {
             Class.forName("org.sqlite.JDBC");

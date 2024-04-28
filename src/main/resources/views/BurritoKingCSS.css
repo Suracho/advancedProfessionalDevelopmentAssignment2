@@ -1,0 +1,17 @@
+.loginButton{
+    -fx-font-size: 12px;
+    -fx-padding: 10px 20px;
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.loginButton:hover {
+    -fx-background-color: #2980b9;
+}
+
+.root {
+    -fx-background-color: #839dfa;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
