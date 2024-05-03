@@ -11,13 +11,14 @@ import org.sqlite.JDBC;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class BurritoKingApplication extends Application {
 
-    private static final String location = BurritoKingApplication.class.getResource("/com.example.assignment2.database/database.db").toExternalForm();
+    private static final String location = Objects.requireNonNull(BurritoKingApplication.class.getResource("/com.example.assignment2.database/database.db")).toExternalForm();
 
     @Override
     public void start(Stage stage) throws IOException, SQLException {
@@ -34,14 +35,15 @@ public class BurritoKingApplication extends Application {
 
     }
 
-
     public static void main(String[] args) {
         checkDrivers();
         Connection connection = connect();
+        updatePersonsFromDB();
         launch();
     }
 
-    private static Connection connect() {
+    // connect method to connect to jdbc database sqlite
+    public static Connection connect() {
         String dbPrefix = "jdbc:sqlite:";
         Connection connection;
         try {
@@ -69,14 +71,17 @@ public class BurritoKingApplication extends Application {
     }
 
 
-//    private static void updatePersonsFromDB() {
-//        try (Connection connection = BurritoKingApplication.connect()) {
-////            PreparedStatement statement = connection.prepareStatement(query);
-//            ResultSet rs = statement.executeQuery();
-//        } catch (SQLException e) {
-//            Logger.getAnonymousLogger().log(
-//                    Level.SEVERE,
-//                    LocalDateTime.now() + ": Could not load Persons from database ");
-//        }
-//    }
+    private static void updatePersonsFromDB() {
+        try (Connection connection = BurritoKingApplication.connect()) {
+            String query = "SELECT * FROM Persons";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(rs);
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": Could not load Persons from database ");
+        }
+    }
 }
