@@ -36,6 +36,7 @@ public class BurritoKingRegistrationController {
     @FXML
     private Label errorLabel;
 
+    @FXML
     // function to switch to login screen without mouse event
     public void switchToLoginScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
@@ -46,8 +47,9 @@ public class BurritoKingRegistrationController {
         stage.show();
     }
 
+    @FXML
     // function to switch to login screen with mouse event
-    public void switchToLoginScreen(MouseEvent mouseEvent) throws IOException {
+    protected void switchToLoginScreen(MouseEvent mouseEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
@@ -56,8 +58,9 @@ public class BurritoKingRegistrationController {
         stage.show();
     }
 
+    @FXML
     // code to insert user into db for registration
-    public void insertUserIntoDB() {
+    protected void insertUserIntoDB() {
 
         String usernameIP = username.getText();
         String passwordIP = password.getText();
@@ -65,40 +68,20 @@ public class BurritoKingRegistrationController {
         String lastNameIP = lastName.getText();
 
 
-        if (usernameIP.equals("") || firstNameIP.equals("") || lastNameIP.equals("") || passwordIP.equals("")){
+        if (usernameIP.isEmpty() || firstNameIP.isEmpty() || lastNameIP.isEmpty() || passwordIP.isEmpty()){
             errorLabel.setText("Please fill in all the details");
             return;
         } else{
             try (Connection connection = BurritoKingApplication.connect()){
                 assert connection != null;
 
-                PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(username, firstName, lastName, password) VALUES(?, ?, ?, ?)");
+                PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(username, firstName, lastName, password, isVipPermissionAsked) VALUES(?, ?, ?, ?, ?)");
                 // Set the values to be inserted
                 stmt.setString(1, usernameIP);
                 stmt.setString(2, firstNameIP);
                 stmt.setString(3, lastNameIP);
                 stmt.setString(4, passwordIP);
-
-//            String query = "SELECT * FROM User";
-//            PreparedStatement statement = connection.prepareStatement(query);
-//            ResultSet rs = statement.executeQuery();
-//            System.out.println(rs);
-
-//            while(rs.next()){
-//                int userId = rs.getInt("userId");
-//                String username = rs.getString("username");
-//                String firstName = rs.getString("firstName");
-//                String lastName = rs.getString("lastName");
-//                String password = rs.getString("password");
-//
-//                System.out.println("User ID: " + userId);
-//                System.out.println("Username: " + username);
-//                System.out.println("First Name: " + firstName);
-//                System.out.println("Last Name: " + lastName);
-//                System.out.println("Password: " + password);
-//                System.out.println("--------------------");
-//            }
-
+                stmt.setInt(5, 0);
 
                 int f = stmt.executeUpdate();
                 System.out.println(f);
@@ -114,18 +97,17 @@ public class BurritoKingRegistrationController {
 
 
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                if (e.getErrorCode() == 19){
+                    errorLabel.setText("Username already exists");
+                }
                 Logger.getAnonymousLogger().log(
                         Level.SEVERE,
-                        LocalDateTime.now() + ": Could not insert users into database ");
+                        LocalDateTime.now() + ": " + e.getMessage());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-
-    }
-    public void createUser(ActionEvent actionEvent){
 
     }
 }

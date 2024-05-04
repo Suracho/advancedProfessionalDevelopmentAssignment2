@@ -38,7 +38,6 @@ public class BurritoKingApplication extends Application {
     public static void main(String[] args) {
         checkDrivers();
         Connection connection = connect();
-        updatePersonsFromDB();
         launch();
     }
 
@@ -67,21 +66,6 @@ public class BurritoKingApplication extends Application {
         } catch (ClassNotFoundException | SQLException classNotFoundException) {
             Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not start SQLite Drivers");
             return false;
-        }
-    }
-
-
-    private static void updatePersonsFromDB() {
-        try (Connection connection = BurritoKingApplication.connect()) {
-            String query = "SELECT * FROM Persons";
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery();
-            System.out.println(rs);
-            connection.close();
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": Could not load Persons from database ");
         }
     }
 }
