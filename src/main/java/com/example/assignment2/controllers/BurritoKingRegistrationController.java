@@ -75,13 +75,14 @@ public class BurritoKingRegistrationController {
             try (Connection connection = BurritoKingApplication.connect()){
                 assert connection != null;
 
-                PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(username, firstName, lastName, password, isVipPermissionAsked) VALUES(?, ?, ?, ?, ?)");
+                PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(username, firstName, lastName, password, isVipPermissionAsked, isLoggedIn) VALUES(?, ?, ?, ?, ?, ?)");
                 // Set the values to be inserted
                 stmt.setString(1, usernameIP);
                 stmt.setString(2, firstNameIP);
                 stmt.setString(3, lastNameIP);
                 stmt.setString(4, passwordIP);
                 stmt.setInt(5, 0);
+                stmt.setInt(6, 0);
 
                 int f = stmt.executeUpdate();
                 System.out.println(f);

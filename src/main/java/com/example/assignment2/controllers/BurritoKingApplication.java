@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.sqlite.JDBC;
 
 import java.io.IOException;
@@ -58,14 +57,12 @@ public class BurritoKingApplication extends Application {
     }
 
     //checks for the driver and then registers it
-    private static boolean checkDrivers() {
+    private static void checkDrivers() {
         try {
             Class.forName("org.sqlite.JDBC");
             DriverManager.registerDriver(new JDBC());
-            return true;
         } catch (ClassNotFoundException | SQLException classNotFoundException) {
             Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not start SQLite Drivers");
-            return false;
         }
     }
 }

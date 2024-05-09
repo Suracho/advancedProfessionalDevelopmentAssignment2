@@ -35,8 +35,13 @@ public class BurritoKingLoginController {
 
     // function to switch to registration screens without mouse event
     @FXML
-    protected void switchToRegistrationScreen() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingRegistration.fxml"));
+    protected void switchToDashboard(boolean isVip) throws IOException {
+        FXMLLoader fxmlLoader;
+        if (isVip){
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingVipDashboard.fxml"));
+        } else {
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingNonVipDashboard.fxml"));
+        }
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
@@ -83,19 +88,20 @@ public class BurritoKingLoginController {
                         String isVipPermissionAsked = rs.getString("isVipPermissionAsked");
                         connection.close();
 
+                        boolean isVip = checkIsVip(userId);
+
                         if (password.equals(passwordIP)){
                             if (isVipPermissionAsked.equals("0")){
                                 showIsVipAlert(userId);
-                            } else {
-                                switchToRegistrationScreen();
                             }
+                            switchToDashboard(isVip);
                             System.out.println("Password matches");
                         }else {
                             loginMessageLabel.setText("Wrong password, please try again.");
                         }
 
                 }
-            } catch (SQLException | IOException e) {
+            } catch (Exception e) {
                 Logger.getAnonymousLogger().log(
                         Level.SEVERE,
                         LocalDateTime.now() + ": " + e.getMessage());
@@ -109,8 +115,6 @@ public class BurritoKingLoginController {
         alert.setTitle("VIP Confirmation");
         alert.setHeaderText("Do you want to be a VIP user?");
         alert.setContentText("A VIP user gets extra benefits like a special 3$ discounts on a Meal. You also get special credits for every purchase you make! Please provide your email address if you want to become a VIP user.\n By providing your email address you agree to receive promotion information via email. Click Cancel if you will like to opt out.");
-
-
 
         // Add a VBox to hold confirmation message and email field
         VBox confirmationPane = new VBox();
@@ -131,8 +135,6 @@ public class BurritoKingLoginController {
                 isEmailAddressEntered = true;
             }
         }
-        switchToRegistrationScreen();
-
     }
 
     // function to update the vip status of the user
@@ -165,4 +167,41 @@ public class BurritoKingLoginController {
                     LocalDateTime.now() + ": " + e.getMessage());
         }
     }
+
+    // checks if the user is vip or not
+    private boolean checkIsVip(int userId) throws Exception {
+        try (Connection connection = BurritoKingApplication.connect()) {
+            String query = "SELECT * FROM VipUsers WHERE userId=?";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+            boolean isVip = rs.next();
+            connection.close();
+            return isVip;
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+        throw new Exception("Couldn't establish connection");
+    }
+
+    // sets isLoggedIn to true for logged in user and false for everyone else
+    private void setIsLoggedIn(int userId){
+        try (Connection connection = BurritoKingApplication.connect()) {
+            String query = "UPDATE User SET isLoggedIn = '1' WHERE userId = ?";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, userId);
+            int isUpdated = statement.executeUpdate();
+
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+    }
+
 }
