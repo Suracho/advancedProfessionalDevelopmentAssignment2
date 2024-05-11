@@ -1,6 +1,5 @@
 package com.example.assignment2.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,7 +37,7 @@ public class BurritoKingRegistrationController {
     @FXML
     // function to switch to login screen without mouse event
     public void switchToLoginScreen() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) errorLabel.getScene().getWindow();
@@ -50,7 +48,7 @@ public class BurritoKingRegistrationController {
     @FXML
     // function to switch to login screen with mouse event
     protected void switchToLoginScreen(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();

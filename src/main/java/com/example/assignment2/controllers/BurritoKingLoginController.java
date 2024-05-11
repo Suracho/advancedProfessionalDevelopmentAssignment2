@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BurritoKingLoginController {
+public class BurritoKingLoginController extends CommonFunctions{
 
     @FXML
     private Label loginMessageLabel;
@@ -89,13 +89,16 @@ public class BurritoKingLoginController {
                         connection.close();
 
                         boolean isVip = checkIsVip(userId);
+                        boolean isVipSelected = isVip;
 
                         if (password.equals(passwordIP)){
                             if (isVipPermissionAsked.equals("0")){
-                                showIsVipAlert(userId);
+                                isVipSelected = showIsVipAlert(userId);
                             }
-                            switchToDashboard(isVip);
-                            System.out.println("Password matches");
+                            setIsLoggedIn(userId, "1");
+                            setIsLoggedIn(userId, "0");
+                            setIsVipPermissionAsked(userId);
+                            switchToDashboard(isVipSelected);
                         }else {
                             loginMessageLabel.setText("Wrong password, please try again.");
                         }
@@ -110,7 +113,7 @@ public class BurritoKingLoginController {
     }
 
     // function which shows the alert box wherein we ask if the user is vip or not.
-    private void showIsVipAlert(int userId) throws IOException {
+    private boolean showIsVipAlert(int userId) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("VIP Confirmation");
         alert.setHeaderText("Do you want to be a VIP user?");
@@ -126,13 +129,15 @@ public class BurritoKingLoginController {
 
         alert.getDialogPane().setContent(confirmationPane);
 
-        boolean isEmailAddressEntered = false;
-        while (!isEmailAddressEntered){
-            if (alert.showAndWait().get() == ButtonType.OK && !emailField.getText().isEmpty()){
+        while (true){
+            ButtonType bt = alert.showAndWait().get();
+            if (bt == ButtonType.OK && !emailField.getText().isEmpty()){
                 System.out.println("YOU ARE VIP");
                 String emailAddress = emailField.getText();
                 updateVipStatusInUserAndInsertAVipUser(userId, emailAddress);
-                isEmailAddressEntered = true;
+                return true;
+            } else if (bt == ButtonType.CANCEL) {
+                return false;
             }
         }
     }
@@ -168,29 +173,37 @@ public class BurritoKingLoginController {
         }
     }
 
-    // checks if the user is vip or not
-    private boolean checkIsVip(int userId) throws Exception {
+
+
+    // sets isLoggedIn to true for logged in user and false for everyone else
+    private void setIsLoggedIn(int userId, String zeroOrOne){
+        String query = "";
         try (Connection connection = BurritoKingApplication.connect()) {
-            String query = "SELECT * FROM VipUsers WHERE userId=?";
+            if (zeroOrOne.equals("1")){
+                query = "UPDATE User SET isLoggedIn = ? WHERE userId = ?";
+            } else {
+                query = "UPDATE User SET isLoggedIn = ? WHERE userId != ?";
+            }
             assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, userId);
-            ResultSet rs = statement.executeQuery();
-            boolean isVip = rs.next();
+            statement.setString(1, zeroOrOne);
+            statement.setInt(2, userId);
+            int isUpdated = statement.executeUpdate();
+
             connection.close();
-            return isVip;
         } catch (SQLException e) {
             Logger.getAnonymousLogger().log(
                     Level.SEVERE,
                     LocalDateTime.now() + ": " + e.getMessage());
         }
-        throw new Exception("Couldn't establish connection");
     }
 
-    // sets isLoggedIn to true for logged in user and false for everyone else
-    private void setIsLoggedIn(int userId){
+    // sets isVipPermissionAsked to true
+    private void setIsVipPermissionAsked(int userId){
         try (Connection connection = BurritoKingApplication.connect()) {
-            String query = "UPDATE User SET isLoggedIn = '1' WHERE userId = ?";
+
+            String query = "UPDATE User SET isVipPermissionAsked = 1 WHERE userId = ?";
+
             assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, userId);

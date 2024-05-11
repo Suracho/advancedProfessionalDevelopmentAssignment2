@@ -21,7 +21,7 @@ public class BurritoKingApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKing-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Image icon = new Image("file:src/BurritoKing.png");
 

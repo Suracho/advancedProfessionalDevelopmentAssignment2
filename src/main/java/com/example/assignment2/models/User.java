@@ -5,21 +5,28 @@ public class User {
 
     private String username;
     private Integer userId;
-    private Integer isVip;
-
-
 
     private String firstName;
     private String lastName;
     private String password;
+    private String isLoggedIn;
+    private String isVipPermissionAsked;
 
-    public User(String username, Integer userId, Integer isVip, String firstName, String lastName, String password) {
+    public User(String username, String firstName, String lastName, String password) {
         this.username = username;
-        this.userId = userId;
-        this.isVip = isVip;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+    }
+
+    public User(String username, Integer userId, String firstName, String lastName, String password, String isLoggedIn, String isVipPermissionAsked) {
+        this.username = username;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.isLoggedIn = isLoggedIn;
+        this.isVipPermissionAsked = isVipPermissionAsked;
     }
 
     public Integer getUserId() {
@@ -62,11 +69,19 @@ public class User {
         this.username = username;
     }
 
-    public Integer getIsVip() {
-        return isVip;
+    public String getIsLoggedIn() {
+        return isLoggedIn;
     }
 
-    public void setIsVip(Integer isVip) {
-        this.isVip = isVip;
+    public void setIsLoggedIn(String isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public String getIsVipPermissionAsked() {
+        return isVipPermissionAsked;
+    }
+
+    public void setIsVipPermissionAsked(String isVipPermissionAsked) {
+        this.isVipPermissionAsked = isVipPermissionAsked;
     }
 }

@@ -11,18 +11,18 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingNonVipDashboardController">
    <children>
       <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
             <AnchorPane style="-fx-background-color: #000000;">
                <children>
-                  <Label id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0">
+                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0">
+                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="21.0" />
                      </font>
@@ -69,7 +69,7 @@
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button id="loginButton" fx:id="registerButton21" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#insertUserIntoDB" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
+                  <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
