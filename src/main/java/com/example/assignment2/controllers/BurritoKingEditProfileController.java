@@ -1,24 +1,12 @@
 package com.example.assignment2.controllers;
 
 import com.example.assignment2.models.User;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class BurritoKingEditProfile extends CommonFunctions{
+// This is the controller Class for Edit profile View which contains an initialize method to display the user values fetched from db
+public class BurritoKingEditProfileController extends CommonFunctions{
 
     @FXML
     private TextField username;
@@ -46,7 +34,6 @@ public class BurritoKingEditProfile extends CommonFunctions{
 
         User user = new User(inputUsername, inputFirstName, inputLastName, inputPassword);
         try {
-
             updateUser(user);
             updateLabel.setText("Profile updated successfully, please proceed to the home page!");
         } catch (Exception ex){

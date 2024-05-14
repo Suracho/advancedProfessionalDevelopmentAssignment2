@@ -38,9 +38,9 @@ public class BurritoKingLoginController extends CommonFunctions{
     protected void switchToDashboard(boolean isVip) throws IOException {
         FXMLLoader fxmlLoader;
         if (isVip){
-            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingVipDashboard.fxml"));
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingVipDashboard.fxml"));
         } else {
-            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingNonVipDashboard.fxml"));
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingNonVipDashboard.fxml"));
         }
 
         Scene scene = new Scene(fxmlLoader.load());
@@ -52,7 +52,7 @@ public class BurritoKingLoginController extends CommonFunctions{
     // function to switch to registration screens
     @FXML
     protected void switchToRegistrationScreen(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingRegistration.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingRegistration.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();

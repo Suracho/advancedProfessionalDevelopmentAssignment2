@@ -1,10 +1,15 @@
 package com.example.assignment2.models;
 
-// main class
+/**
+ * The Main class is the entry point of the sample console program.
+ */
 public class Main {
-    public static void main(String[] args) {
+	
+	public static void main(String args[]){
+		Restaurant restaurant = new Restaurant("Burrito Restaurant");
+		Menu menu = new Menu(restaurant);
+		menu.show();
+		
+	}
 
-        Restaurant restaurant = new Restaurant("Burrito King");
-        restaurant.run();
-    }
 }

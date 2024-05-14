@@ -37,7 +37,7 @@ public class BurritoKingRegistrationController {
     @FXML
     // function to switch to login screen without mouse event
     public void switchToLoginScreen() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingLogin.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) errorLabel.getScene().getWindow();
@@ -48,7 +48,7 @@ public class BurritoKingRegistrationController {
     @FXML
     // function to switch to login screen with mouse event
     protected void switchToLoginScreen(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingLogin.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();

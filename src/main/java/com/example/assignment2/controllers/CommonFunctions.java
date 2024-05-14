@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// This is an abstract class which is extended by every screen, to access some common functions. This supports code reusability.
 abstract class CommonFunctions {
 
     // function to proceed To Home with mouse event
@@ -28,9 +29,9 @@ abstract class CommonFunctions {
         boolean isVip = checkIsVip(userId);
 
         if (isVip){
-            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingVipDashboard.fxml"));
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingVipDashboard.fxml"));
         } else {
-            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingNonVipDashboard.fxml"));
+            fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingNonVipDashboard.fxml"));
         }
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -44,7 +45,7 @@ abstract class CommonFunctions {
     protected void logout(ActionEvent actionEvent) throws IOException {
         setIsLoggedIn();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.controllers/BurritoKingLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
