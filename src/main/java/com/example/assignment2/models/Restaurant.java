@@ -15,16 +15,36 @@ public class Restaurant {
     // store all historical orders
     private static final LinkedList<Order> allOrders = new LinkedList<Order>();
     private static final int mealDiscount = 3;
-    
-    public Restaurant(String name) {
-    	priceMap.put("Burrito", 7.0);
+
+	// Private constructor to prevent external instantiation
+	private Restaurant(String name) {
+		this.name = name;
+
+		priceMap.put("Burrito", 7.0);
 		priceMap.put("Fries", 4.0);
 		priceMap.put("Soda", 2.5);
-		this.remainedFries = 0;
-		this.name = name;
-    }
-    
-    public String getName() {
+		remainedFries = 0;
+	}
+
+	// volatile for thread safety
+	private static volatile Restaurant instance;
+
+
+	// This ensures only one instance is created and returned.
+	public static Restaurant getInstance(String name) {
+		if (instance == null) {
+			synchronized (Restaurant.class) {
+				if (instance == null) {
+					instance = new Restaurant(name);
+				}
+			}
+		}
+		return instance;
+	}
+
+
+
+	public String getName() {
     	return this.name;
     }
     
@@ -37,8 +57,8 @@ public class Restaurant {
 		return priceMap.get(foodName);
 	}
     
-    public LinkedList<Order> getAllOrders(){
-    	return this.allOrders;
+    public static LinkedList<Order> getAllOrders(){
+    	return allOrders;
     }
     
     public int getRemainedFries() {

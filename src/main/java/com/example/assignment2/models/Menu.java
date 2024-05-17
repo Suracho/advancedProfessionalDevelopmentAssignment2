@@ -1,5 +1,7 @@
 package com.example.assignment2.models;
 
+import javafx.util.Pair;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -35,7 +37,7 @@ public class Menu {
 			
 			switch (input) {
 				case 'a':
-					this.order();
+//					this.order();
 					break;
 				case 'b':
 					this.showSalesReport();
@@ -107,83 +109,55 @@ public class Menu {
     /**
      * The method to place orders.
      */
-    public void order() {
-    	boolean finishedOrdering = false;
-    	while(!finishedOrdering) {
-    		showFoodMenu(String.format("   %s%n   %s%n", "4. Meal", "5. No more"));
-    		int option = readUserOption(1, 5);
-    		if (option == 1) {
-    			System.out.print("How many burritos would you like to buy: ");
-    			int quantity = Integer.parseInt(readUserInput());
-    			this.activeOrder.addFoodItem(new Burrito(Restaurant.getPrice("Burrito"), quantity));
-    		}else if (option == 2){
-    			System.out.print("How many serves of fries would you like to buy: ");
-    			int quantity = Integer.parseInt(readUserInput());
-    			this.activeOrder.addFoodItem(new Fries(Restaurant.getPrice("Fries"), quantity));
-    		}else if (option == 3) {
-    			System.out.print("How many soda would you like to buy: ");
-    			int quantity = Integer.parseInt(readUserInput());
-    			this.activeOrder.addFoodItem(new Soda(Restaurant.getPrice("Soda"), quantity));
-    		}else if (option == 4) {
-    			System.out.print("How many meals would you like to buy: ");
-    			int quantity = Integer.parseInt(readUserInput());
-    			double price = Restaurant.getPrice("Burrito") + Restaurant.getPrice("Fries") 
-    			+ Restaurant.getPrice("Soda") - Restaurant.getDiscount();
-    			this.activeOrder.addFoodItem(new Meal(price, quantity));
-    		}else if (option == 5) {
-    			finishedOrdering = true;
-    		}   	
-    	}
-    	this.processPayment();
+    public Pair<Double, String> order(int burritoCount, int friesCount, int sodaCount, int mealCount) {
+		if (burritoCount != 0){
+			this.activeOrder.addFoodItem(new Burrito(Restaurant.getPrice("Burrito"), burritoCount));
+		}
+		if (friesCount != 0) {
+			this.activeOrder.addFoodItem(new Fries(Restaurant.getPrice("Fries"), friesCount));
+		}
+		if (sodaCount != 0){
+			this.activeOrder.addFoodItem(new Soda(Restaurant.getPrice("Soda"), sodaCount));
+		}
+		if (mealCount != 0){
+			double price = Restaurant.getPrice("Burrito") + Restaurant.getPrice("Fries")
+					+ Restaurant.getPrice("Soda") - Restaurant.getDiscount();
+			this.activeOrder.addFoodItem(new Meal(price, mealCount));
+		}
+
+    	Pair<Double, String> paymentInfo = this.processPayment();
     	System.out.println("Time taken: " + this.activeOrder.getPrepTime(this.restaurant) + " minutes");
     	if(this.restaurant.updateRemainingServes(this.activeOrder)) {
     		System.out.println(this.restaurant.getRemainedFries() + " serves of fries will be left for next order.");
     	}
     	this.restaurant.addOrderToHistory(this.activeOrder);
     	this.activeOrder = new Order();
+
+		return paymentInfo;
     }
     
     /*
      * The method to process payment
      */
-    public void processPayment() {
+    public Pair<Double, String> processPayment() {
     	double price = this.activeOrder.getTotalPrice();
     	StringBuilder sb = new StringBuilder("Total for ");
     	for (int i=0; i < this.activeOrder.getItems().size(); i++) {
     		FoodItem item = this.activeOrder.getItems().get(i);
-    		sb.append(item.getQuantity() + " ");
+    		sb.append(item.getQuantity()).append(" ");
     		String foodClass = item.getClass().getName();
-    		if (foodClass.equals("Burrito")){
-    			sb.append("burrito(s) ");
-    		}else if (foodClass.equals("Fries")){
-    			sb.append("fries ");
-    		}else if (foodClass.equals("Soda")) {
-    			sb.append("soda ");
-    		}else if (foodClass.equals("Meal")) {
-    			sb.append("meal(s) ");
-    		}
+            switch (foodClass) {
+                case "Burrito" -> sb.append("burrito(s) ");
+                case "Fries" -> sb.append("fries ");
+                case "Soda" -> sb.append("soda ");
+                case "Meal" -> sb.append("meal(s) ");
+            }
     		if (i < this.activeOrder.getItems().size()-1) {
     			sb.append("and ");
     		}
     	}
-    	sb.append("is $" + price);
-    	System.out.println(sb.toString());
-    	
-    	boolean paid = false;
-    	
-    	while(!paid) {
-    		System.out.print("Please enter money: ");
-    		double amount = Double.parseDouble(readUserInput());
-    		if(amount < price) {
-    			System.out.println("Sorry, that’s not enough to pay for order");
-    		}else {
-    			double change = amount - price;
-    			if (change > 0.0) {
-    				System.out.println("Change returned $" + change);
-    			}
-    			paid = true;
-    		}   		
-    	}
+    	sb.append("is $").append(price);
+		return new Pair<Double, String>(price, sb.toString());
     }
     
     /*

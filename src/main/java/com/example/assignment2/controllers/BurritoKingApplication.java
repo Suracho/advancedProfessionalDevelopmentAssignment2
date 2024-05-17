@@ -1,5 +1,7 @@
 package com.example.assignment2.controllers;
 
+import com.example.assignment2.models.Menu;
+import com.example.assignment2.models.Restaurant;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +18,12 @@ import java.util.logging.Logger;
 
 
 public class BurritoKingApplication extends Application {
+
+    private static Menu menu;
+    private static final Restaurant restaurant = Restaurant.getInstance("BurritoKing Restaurant");
+
+
+
 
     private static final String location = Objects.requireNonNull(BurritoKingApplication.class.getResource("/com.example.assignment2.database/database.db")).toExternalForm();
 
@@ -37,6 +45,8 @@ public class BurritoKingApplication extends Application {
     public static void main(String[] args) {
         checkDrivers();
         Connection connection = connect();
+        Menu menuInstance = new Menu(restaurant);
+        BurritoKingApplication.menu = menuInstance;
         launch();
     }
 
@@ -64,5 +74,15 @@ public class BurritoKingApplication extends Application {
         } catch (ClassNotFoundException | SQLException classNotFoundException) {
             Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not start SQLite Drivers");
         }
+    }
+
+    // returns the singleton restaurant instance
+    public static Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+
+    public static Menu getMenu() {
+        return menu;
     }
 }

@@ -1,4 +1,4 @@
 package com.example.assignment2.controllers;
 
-public class BurritoKingPaymentDashboard {
+public class BurritoKingPaymentScreen {
 }

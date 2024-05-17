@@ -62,7 +62,7 @@
                   </Button>
                   <ImageView fitHeight="119.0" fitWidth="134.0" layoutX="43.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../burrito-pixel-art-styl_475147-949.jpg%20copy.png" />
+                        <Image url="@../burrito.png" />
                      </image>
                   </ImageView>
                   <Line endX="49.5" layoutX="128.0" layoutY="127.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
@@ -88,27 +88,12 @@
                   <Line endX="-37.0" endY="-68.1447982788086" layoutX="438.0" layoutY="193.0" startX="-37.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
                   <Line endX="60.5" endY="-50.0" layoutX="492.0" layoutY="284.0" startX="-88.5" startY="-50.0" stroke="#dddb32" strokeWidth="5.0" />
                   <Button fx:id="burritoPlus" layoutX="68.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementBurrito" text="+" />
-                  <Button fx:id="burritoMinus" layoutX="139.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementBurrito" text="-" />
-                  <Label fx:id="burritoCount" layoutX="101.0" layoutY="261.0" text="0" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="32.0" />
-                     </font>
-                  </Label>
+                  <Button fx:id="burritoMinus" layoutX="151.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementBurrito" text="-" />
                   <Button fx:id="friesPlus" layoutX="248.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementFries" text="+" />
-                  <Label fx:id="friesCount" layoutX="282.0" layoutY="261.0" text="0" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="32.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="friesMinus" layoutX="320.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementFries" text="-" />
+                  <Button fx:id="friesMinus" layoutX="333.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementFries" text="-" />
                   <Button fx:id="sodaPlus" layoutX="428.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementSoda" text="+" />
-                  <Label fx:id="sodaCount" layoutX="465.0" layoutY="261.0" text="0" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="32.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="sodaMinus" layoutX="504.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementSoda" text="-" />
-                  <Button id="loginButton" fx:id="addToOrderButton" alignment="CENTER" contentDisplay="CENTER" layoutX="237.0" layoutY="349.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Add to cart" textFill="#e82a0d">
+                  <Button fx:id="sodaMinus" layoutX="515.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementSoda" text="-" />
+                  <Button id="loginButton" fx:id="addToOrderButton" alignment="CENTER" contentDisplay="CENTER" layoutX="237.0" layoutY="349.0" mnemonicParsing="false" onAction="#addOrderToDatabase" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Add to cart" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
@@ -128,6 +113,9 @@
                         <Font name="Georgia Bold" size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="friesCount" alignment="CENTER" layoutX="282.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <TextField fx:id="burritoCount" alignment="CENTER" layoutX="103.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <TextField fx:id="sodaCount" alignment="CENTER" layoutX="466.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
                </children>
             </AnchorPane>
          </items>

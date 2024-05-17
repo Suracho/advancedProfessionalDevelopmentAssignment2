@@ -139,6 +139,27 @@ abstract class CommonFunctions {
         }
     }
 
+    // adds order to the table
+    protected void insertOrderInDb(boolean pendingPayment, Double totalPrice,Double waitingTime){
+        User loggedInUser = getIsLoggedInUser();
+        try (Connection connection = BurritoKingApplication.connect()) {
+            String query = "INSERT INTO Orders(userId, pendingPayment, totalPrice, waitingTime) VALUES(?, ?, ?, ?)";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1,  loggedInUser.getUserId());
+            statement.setInt(2,  pendingPayment ? 1 : 0);
+            statement.setDouble(3,  totalPrice);
+            statement.setDouble(4,  waitingTime);
+            int isUpdated = statement.executeUpdate();
+
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+    }
+
     // sets isLoggedIn to false for all user
     private void setIsLoggedIn() {
         try (Connection connection = BurritoKingApplication.connect()) {
