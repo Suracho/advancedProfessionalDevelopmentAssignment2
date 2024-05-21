@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingPaymentScreen">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingCartController">
    <children>
-      <SplitPane dividerPositions="0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
             <AnchorPane style="-fx-background-color: #000000;">
                <children>
@@ -50,19 +52,40 @@
                   <Polygon fill="#e82700" layoutX="210.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fill="#e82700" layoutX="131.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fill="#e82700" layoutX="572.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutX="27.0" layoutY="22.0" prefHeight="26.0" prefWidth="349.0" style="-fx-text-fill: #FFFFFF;" text="Your Cart" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
                   <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="cardNumber" layoutX="230.0" layoutY="119.0" promptText="16 digits card number" />
-                  <TextField fx:id="cvv" layoutX="230.0" layoutY="204.0" promptText="CVV" />
-                  <DatePicker fx:id="expiryDate" layoutX="227.0" layoutY="162.0" prefHeight="26.0" prefWidth="160.0" />
-                  <Button id="loginButton" fx:id="logoutButton1" alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="262.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Pay" textFill="#e82a0d">
+                  <Line endX="-37.0" endY="-67.75930786132812" layoutX="64.0" layoutY="195.0" startX="-37.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Button id="updateButton" fx:id="updateCartButton" alignment="CENTER" contentDisplay="CENTER" layoutX="103.0" layoutY="445.0" mnemonicParsing="false" onAction="#proceedToAddOrder" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Update Cart" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
+                  <TableView fx:id="foodSummaryTable" layoutX="181.0" layoutY="102.0" prefHeight="200.0" prefWidth="301.0">
+                    <columns>
+                      <TableColumn fx:id="orderIdColumn" prefWidth="75.0" text="Order Id" />
+                      <TableColumn fx:id="foodTypeColumn" prefWidth="75.0" text="Food Type" />
+                        <TableColumn fx:id="priceColumn" prefWidth="75.0" text="Price" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="75.0" text="Quantity" />
+                    </columns>
+                  </TableView>
+                  <Button id="updateButton" fx:id="proceedToCartButton" alignment="CENTER" contentDisplay="CENTER" layoutX="343.0" layoutY="445.0" mnemonicParsing="false" onAction="#proceedToPaymentScreen" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Proceed To Payment" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="paymentSummaryLabel" layoutX="74.0" layoutY="361.0" prefHeight="46.0" prefWidth="431.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </items>

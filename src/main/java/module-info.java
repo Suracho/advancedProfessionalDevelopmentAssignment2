@@ -17,6 +17,7 @@ module com.example.assignment2.controllers {
 
     exports com.example.assignment2.controllers;
     opens com.example.assignment2.controllers to javafx.fxml;
+    opens com.example.assignment2.models to javafx.base;
 
 
 }

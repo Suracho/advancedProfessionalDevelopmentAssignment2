@@ -1,5 +1,7 @@
 package com.example.assignment2.models;
 
+import javafx.util.Pair;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -8,8 +10,11 @@ import java.util.LinkedList;
  */
 public class Order{
 	private LinkedList<FoodItem> items;
+	// this is hash map which has the Food Item as key and then a pair which contains price of each individual item and the quantity
+	private HashMap<String, Pair<Double, Integer>> itemSummary;
 	public Order() {
 		items = new LinkedList<FoodItem>();
+		itemSummary = new HashMap<String, Pair<Double, Integer>>();
 	}
 	public void addFoodItem(FoodItem newItem) {
 		for(FoodItem item: items) {
@@ -19,6 +24,8 @@ public class Order{
 			}
 		}
 		items.add(newItem);
+
+		itemSummary.put(newItem.getClass().getName(), new Pair<Double, Integer>(newItem.getTotalPrice(), newItem.getQuantity()));
 	}
 	public LinkedList<FoodItem> getItems() {
 		return this.items;

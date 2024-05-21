@@ -146,11 +146,12 @@ public class Menu {
     		FoodItem item = this.activeOrder.getItems().get(i);
     		sb.append(item.getQuantity()).append(" ");
     		String foodClass = item.getClass().getName();
+			System.out.println(foodClass);
             switch (foodClass) {
-                case "Burrito" -> sb.append("burrito(s) ");
-                case "Fries" -> sb.append("fries ");
-                case "Soda" -> sb.append("soda ");
-                case "Meal" -> sb.append("meal(s) ");
+                case "com.example.assignment2.models.Burrito" -> sb.append("burrito(s) ");
+                case "com.example.assignment2.models.Fries" -> sb.append("fries ");
+                case "com.example.assignment2.models.Soda" -> sb.append("soda ");
+                case "com.example.assignment2.models.Meal" -> sb.append("meal(s) ");
             }
     		if (i < this.activeOrder.getItems().size()-1) {
     			sb.append("and ");

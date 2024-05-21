@@ -1,10 +1,14 @@
 package com.example.assignment2.controllers;
 
-import com.example.assignment2.models.Restaurant;
+import com.example.assignment2.models.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Pair;
+
+import java.io.IOException;
+import java.util.List;
 
 import static com.example.assignment2.controllers.BurritoKingApplication.getMenu;
 
@@ -39,10 +43,22 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
     private TextField burritoCount;
 
 
+
     @FXML
     public void initialize() {
+        List<Food> foodList;
         addTextFieldListeners();
+        int userId = getIsLoggedInUser().getUserId();
+        Orders order = getOrderWithPendingPayment(userId);
+        if (order == null){
+            setCounts(false, null);
+        } else {
+            foodList = getFoodListForOrders(order);
+            setCounts(true, foodList);
+        }
     }
+
+
 
     // Adds listeners to text fields to disable plus or minus buttons based on value changes
     private void addTextFieldListeners() {
@@ -121,7 +137,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
 
     // Adds order to the database after fetching values from the count label
     @FXML
-    protected void addOrderToDatabase(){
+    protected void addOrderToDatabase() throws IOException {
         int sodaCounter = Integer.parseInt(sodaCount.getText());
         int friesCounter = Integer.parseInt(friesCount.getText());
         int burritoCounter = Integer.parseInt(burritoCount.getText());
@@ -129,8 +145,12 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
         Pair<Double, String> paymentInfo = BurritoKingApplication.getMenu().order(burritoCounter, friesCounter, sodaCounter, 0);
         Double totalPrice = paymentInfo.getKey();
         String summaryText = paymentInfo.getValue();
-        Double waitingTime = Restaurant.getAllOrders().getLast().getPrepTime(BurritoKingApplication.getRestaurant());
-        insertOrderInDb(true, totalPrice, waitingTime);
+        Order order = Restaurant.getAllOrders().getLast();
+        Double waitingTime = order.getPrepTime(BurritoKingApplication.getRestaurant());
+
+        int orderId = upsertOrderInDb(true, totalPrice, waitingTime);
+        upsertFoodItemsInDb(order, orderId);
+        proceedToCartScreen(summaryText);
     }
 
     // Disables the plus button if the label's text is "100".
@@ -154,6 +174,25 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
             button.setDisable(true);
         } else {
             button.setDisable(false);
+        }
+    }
+
+    // method to set the counts of the variables
+    private void setCounts(boolean isUpdateCart, List<Food> food){
+        if (!isUpdateCart){
+            friesCount.setText("0");
+            burritoCount.setText("0");
+            sodaCount.setText("0");
+        }else {
+            for (Food food1 : food){
+                if (food1.getFoodType().equals(FoodType.BURRITO)){
+                    burritoCount.setText(String.valueOf(food1.getQuantity()));
+                } else if (food1.getFoodType().equals(FoodType.FRIES)) {
+                    friesCount.setText(String.valueOf(food1.getQuantity()));
+                } else {
+                    sodaCount.setText(String.valueOf(food1.getQuantity()));
+                }
+            }
         }
     }
 }
