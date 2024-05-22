@@ -58,7 +58,7 @@
                   <TextField fx:id="cardNumber" layoutX="230.0" layoutY="119.0" promptText="16 digits card number" />
                   <TextField fx:id="cvv" layoutX="230.0" layoutY="204.0" promptText="CVV" />
                   <DatePicker fx:id="expiryDate" layoutX="227.0" layoutY="162.0" prefHeight="26.0" prefWidth="160.0" />
-                  <Button id="loginButton" fx:id="logoutButton1" alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="262.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Pay" textFill="#e82a0d">
+                  <Button id="loginButton" fx:id="paymentButton" alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="262.0" mnemonicParsing="false" onAction="#confirmPayment" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Pay" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>

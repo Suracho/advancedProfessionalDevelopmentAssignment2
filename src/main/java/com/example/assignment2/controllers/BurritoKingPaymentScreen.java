@@ -9,9 +9,12 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 // This is the Controller class for Payment. It contains validation logics for credit card text fields
 public class BurritoKingPaymentScreen extends CommonFunctions{
@@ -24,15 +27,17 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
     @FXML
     private TextField cvv;
 
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/yyyy");
+
     public void initialize() {
         // CVV listener
         cvv.textProperty().addListener((observable, oldValue, newValue) -> {
             // Check if the new value contains only digits
             if (!newValue.matches("\\d*")) {
-                showAlert("Error", "CVV must contain only digits (0-9).");
+                showErrorAlert("Error", "CVV must contain only digits (0-9).");
                 cvv.setText(oldValue);
             } else if (newValue.length() > 3) {
-                showAlert("Error", "CVV must be 3 digits long.");
+                showErrorAlert("Error", "CVV must be 3 digits long.");
                 cvv.setText(oldValue);
             }
         });
@@ -41,41 +46,16 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
         cardNumber.textProperty().addListener((observable, oldValue, newValue) -> {
             // Check if the new value contains only digits
             if (!newValue.matches("\\d*")) {
-                showAlert("Error", "Card number must contain only digits (0-9).");
+                showErrorAlert("Error", "Card number must contain only digits (0-9).");
                 cardNumber.setText(oldValue);
             } else if (newValue.length() > 16) {
-                showAlert("Error", "Card number must be 16 digits long.");
-                cardNumber.setText(oldValue);
-            }
-        });
-
-
-        // Add a listener to the textProperty of the TextField
-        cvv.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Check if the new value is longer than 3 characters
-            if (newValue.length() > 3) {
-                // If it is, display an error message
-                showAlert("Error", "CVV must be 3 digits long.");
-                // Revert to the old value
-                cvv.setText(oldValue);
-            }
-        });
-
-
-        cardNumber.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Check if the new value is longer than 16 characters
-            if (newValue.length() > 16) {
-                // If it is, display an error message
-                showAlert("Error", "Card number must be 16 digits long.");
-                // Revert to the old value
+                showErrorAlert("Error", "Card number must be 16 digits long.");
                 cardNumber.setText(oldValue);
             }
         });
 
         // Set a custom StringConverter to display only the month and year
         expiryDate.setConverter(new StringConverter<LocalDate>() {
-            private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/yyyy");
-
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {
@@ -114,12 +94,30 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
         });
     }
 
-    // Method to show an alert
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    // Function to fetch the card details and confirm the payment as done in database
+    @FXML
+    protected void confirmPayment() throws Exception {
+        String cardNumberText = cardNumber.getText();
+        String cvvText = cvv.getText();
+        LocalDate expiryDateValue = expiryDate.getValue();
+        String expiryDateText = expiryDateValue != null ? dateFormatter.format(expiryDateValue) : "";
+
+        if (cardNumberText.length() != 16){
+            return;
+        } else if (cvvText.length() != 3){
+            return;
+        } else if (expiryDateText.isEmpty()){
+            return;
+        }
+
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a"); // Use 'a' for AM/PM
+        String formattedTime = formatter.format(now);
+        LocalTime lt = showConfirmationAlertForFetchingCurrentTime("Time Confirmation", "The time right now is " + formattedTime + ". Do you want to change the time?", formattedTime);
+        String formattedLt = lt.toString();
+
+        confirmPayment(formattedLt);
+        proceedToHome();
     }
 }

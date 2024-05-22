@@ -93,7 +93,7 @@ public class BurritoKingLoginController extends CommonFunctions{
 
                         if (password.equals(passwordIP)){
                             if (isVipPermissionAsked.equals("0")){
-                                isVipSelected = showIsVipAlert(userId);
+                                isVipSelected = showIsVipAlert(userId, true);
                             }
                             setIsLoggedIn(userId, "1");
                             setIsLoggedIn(userId, "0");
@@ -112,66 +112,6 @@ public class BurritoKingLoginController extends CommonFunctions{
         }
     }
 
-    // function which shows the alert box wherein we ask if the user is vip or not.
-    private boolean showIsVipAlert(int userId) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("VIP Confirmation");
-        alert.setHeaderText("Do you want to be a VIP user?");
-        alert.setContentText("A VIP user gets extra benefits like a special 3$ discounts on a Meal. You also get special credits for every purchase you make! Please provide your email address if you want to become a VIP user.\n By providing your email address you agree to receive promotion information via email. Click Cancel if you will like to opt out.");
-
-        // Add a VBox to hold confirmation message and email field
-        VBox confirmationPane = new VBox();
-        confirmationPane.getChildren().add(new Label(alert.getContentText()));
-
-        Label emailLabel = new Label("Enter your email address:");
-        TextField emailField = new TextField();
-        confirmationPane.getChildren().addAll(emailLabel, emailField);
-
-        alert.getDialogPane().setContent(confirmationPane);
-
-        while (true){
-            ButtonType bt = alert.showAndWait().get();
-            if (bt == ButtonType.OK && !emailField.getText().isEmpty()){
-                System.out.println("YOU ARE VIP");
-                String emailAddress = emailField.getText();
-                updateVipStatusInUserAndInsertAVipUser(userId, emailAddress);
-                return true;
-            } else if (bt == ButtonType.CANCEL) {
-                return false;
-            }
-        }
-    }
-
-    // function to update the vip status of the user
-    private void updateVipStatusInUserAndInsertAVipUser(int userId, String emailAddress) {
-        try (Connection connection = BurritoKingApplication.connect()) {
-            String query = "UPDATE User SET isVipPermissionAsked = '1' WHERE userId = ?";
-            assert connection != null;
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, userId);
-            int isUpdated = statement.executeUpdate();
-
-            if (isUpdated == 1){
-                String insertQuery = "INSERT INTO VipUsers(userId, emailAddress) VALUES(?,?)";
-                PreparedStatement statement1 = connection.prepareStatement(insertQuery);
-                statement1.setInt(1, userId);
-                statement1.setString(2, emailAddress);
-                boolean isInserted = statement1.execute();
-                if (isInserted){
-                    System.out.println("VIP user inserted successfully");
-                } else {
-                    throw new SQLException("Error inserting VIP user in database");
-                }
-            } else {
-                throw new SQLException("Error updating VIP status in User Table");
-            }
-            connection.close();
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": " + e.getMessage());
-        }
-    }
 
 
 

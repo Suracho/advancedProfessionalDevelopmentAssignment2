@@ -148,7 +148,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
         Order order = Restaurant.getAllOrders().getLast();
         Double waitingTime = order.getPrepTime(BurritoKingApplication.getRestaurant());
 
-        int orderId = upsertOrderInDb(true, totalPrice, waitingTime);
+        int orderId = upsertOrderInDb(true, totalPrice, waitingTime, summaryText);
         upsertFoodItemsInDb(order, orderId);
         proceedToCartScreen(summaryText);
     }

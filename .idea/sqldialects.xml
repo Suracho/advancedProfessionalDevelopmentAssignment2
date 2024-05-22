@@ -3,5 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/assignment2/controllers/BurritoKingLoginController.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/assignment2/controllers/BurritoKingRegistrationController.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/assignment2/controllers/CommonFunctions.java" dialect="GenericSQL" />
   </component>
 </project>

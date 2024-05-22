@@ -8,12 +8,55 @@ public class Orders {
     private Integer orderId;
     private Integer userId;
 
+    private String orderStatus;
+    private String timeOrdered;
+    private String dayOrdered;
+    private String collectionTime;
+    private String summaryText;
+
+    public Orders(Double totalPrice, Integer orderId, String orderStatus, String summaryText) {
+        this.totalPrice = totalPrice;
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.summaryText = summaryText;
+    }
+
+    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText) {
+        this.totalPrice = totalPrice;
+        this.waitingTime = waitingTime;
+        this.pendingPayment = pendingPayment;
+        this.orderId = orderId;
+        this.userId = userId;
+        this.orderStatus = orderStatus;
+        this.timeOrdered = timeOrdered;
+        this.dayOrdered = dayOrdered;
+        this.collectionTime = collectionTime;
+        this.summaryText = summaryText;
+    }
+
     public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId) {
         this.totalPrice = totalPrice;
         this.waitingTime = waitingTime;
         this.pendingPayment = pendingPayment;
         this.orderId = orderId;
         this.userId = userId;
+    }
+
+    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus) {
+        this.totalPrice = totalPrice;
+        this.waitingTime = waitingTime;
+        this.pendingPayment = pendingPayment;
+        this.orderId = orderId;
+        this.userId = userId;
+        this.orderStatus = orderStatus;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Double getTotalPrice() {
@@ -54,5 +97,38 @@ public class Orders {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+
+    public String getTimeOrdered() {
+        return timeOrdered;
+    }
+
+    public void setTimeOrdered(String timeOrdered) {
+        this.timeOrdered = timeOrdered;
+    }
+
+    public String getDayOrdered() {
+        return dayOrdered;
+    }
+
+    public void setDayOrdered(String dayOrdered) {
+        this.dayOrdered = dayOrdered;
+    }
+
+    public String getCollectionTime() {
+        return collectionTime;
+    }
+
+    public void setCollectionTime(String collectionTime) {
+        this.collectionTime = collectionTime;
+    }
+
+    public String getSummaryText() {
+        return summaryText;
+    }
+
+    public void setSummaryText(String summaryText) {
+        this.summaryText = summaryText;
     }
 }
