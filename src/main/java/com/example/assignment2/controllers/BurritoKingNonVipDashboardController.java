@@ -1,7 +1,6 @@
 package com.example.assignment2.controllers;
 
-import com.example.assignment2.models.Food;
-import com.example.assignment2.models.FoodType;
+import com.example.assignment2.models.OrderStatus;
 import com.example.assignment2.models.Orders;
 import com.example.assignment2.models.User;
 import javafx.collections.ObservableList;
@@ -18,12 +17,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 // This is the Controller class for managing the Burrito King Non-VIP Dashboard. It contains logic for buttons and table for orders
 public class BurritoKingNonVipDashboardController extends CommonFunctions{
@@ -56,7 +49,7 @@ public class BurritoKingNonVipDashboardController extends CommonFunctions{
         setInputFieldsValues();
 
         // gets order which are awaiting collection and sets the table
-        ObservableList<Orders> orders = getOrdersByStatus("await for collection");
+        ObservableList<Orders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<Orders, Integer>("orderId"));
         orderSummaryColumn.setCellValueFactory(new PropertyValueFactory<Orders, String>("summaryText"));

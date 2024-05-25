@@ -1,14 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.assignment2.controllers.BurritoKingCollectOrder"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingCollectOrderController">
+   <children>
+      <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <items>
+            <AnchorPane style="-fx-background-color: #000000;">
+               <children>
+                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <TextField editable="false" layoutX="15.0" layoutY="408.0" opacity="0.89" prefHeight="25.0" prefWidth="262.0" promptText="This is an application for Burrito King" style="-fx-background-color: #000000; -fx-text-fill: #FFFFFF;" text="Burrito King Restaurant">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="18.0" />
+                     </font>
+                  </TextField>
+                  <ImageView fitHeight="211.0" fitWidth="257.0" layoutX="33.0" layoutY="425.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../BurritoKing.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" style="-fx-background-color: #032152;">
+               <children>
+                  <Polygon fill="#e82700" layoutX="50.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="507.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="441.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="370.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="294.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="210.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="131.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="572.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutX="27.0" layoutY="22.0" prefHeight="26.0" prefWidth="349.0" style="-fx-text-fill: #FFFFFF;" text="Welcome to Burrito King!" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TableView fx:id="collectOrderTable" layoutX="18.0" layoutY="99.0" prefHeight="424.0" prefWidth="593.0">
+                     <columns>
+                        <TableColumn fx:id="orderIdColumn" prefWidth="58.0" text="Order Id" />
+                        <TableColumn fx:id="orderSummaryColumn" prefWidth="249.0" text="Order Summary" />
+                        <TableColumn fx:id="totalPriceColumn" prefWidth="86.0" text="Total Price" />
+                        <TableColumn fx:id="collectOrderColumn" prefWidth="111.0" text="Collect Order" />
+                        <TableColumn fx:id="cancelOrderColumn" prefWidth="86.0" text="Cancel Order" />
+                     </columns>
+                  </TableView>
+                  <Label alignment="CENTER" layoutX="65.0" layoutY="65.0" prefHeight="26.0" prefWidth="458.0" style="-fx-text-fill: #FFFFFF;" text="Collect Orders" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="23.0" />
+                     </font>
+                  </Label>
+                  <Button id="loginButton" fx:id="homePageButton" alignment="CENTER" contentDisplay="CENTER" layoutX="222.0" layoutY="544.0" mnemonicParsing="false" onAction="#proceedToHome" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Go Back to Home Page" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

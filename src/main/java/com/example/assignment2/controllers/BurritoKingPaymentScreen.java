@@ -87,12 +87,15 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
                     @Override
                     public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
-                        setDisable(item.isBefore(LocalDate.now()));
+                        if (item.isBefore(LocalDate.now())) {
+                            setDisable(true);
+                        }
                     }
                 };
             }
         });
     }
+
 
     // Function to fetch the card details and confirm the payment as done in database
     @FXML
@@ -114,7 +117,7 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a"); // Use 'a' for AM/PM
         String formattedTime = formatter.format(now);
-        LocalTime lt = showConfirmationAlertForFetchingCurrentTime("Time Confirmation", "The time right now is " + formattedTime + ". Do you want to change the time?", formattedTime);
+        LocalTime lt = showConfirmationAlertForFetchingCurrentTime("Time Confirmation", "The time right now is " + formattedTime + ". Please enter the time the order was placed at.", formattedTime);
         String formattedLt = lt.toString();
 
         confirmPayment(formattedLt);

@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -28,8 +28,6 @@ import java.util.logging.Logger;
 
 // This is an abstract class which is extended by every screen, to access some common functions. This supports code reusability.
 abstract class CommonFunctions {
-
-
 
     // Function to switch screen proceedToAddOrder according to vip status
     @FXML
@@ -72,6 +70,18 @@ abstract class CommonFunctions {
     @FXML
     protected void proceedToCartScreen(String summaryText) throws IOException {
         changeScreenWithController("/com.example.assignment2.views/BurritoKingCart.fxml", summaryText);
+    }
+
+    // Function to switch screen proceedToViewAllOrders
+    @FXML
+    protected void proceedToViewAllOrdersScreen() throws IOException {
+        changeScreen("/com.example.assignment2.views/BurritoKingViewAllOrdersDashboard.fxml");
+    }
+
+    // Function to switch screen proceedToViewAllOrders
+    @FXML
+    protected void proceedToCollectOrderScreen() throws IOException {
+        changeScreen("/com.example.assignment2.views/BurritoKingCollectOrder.fxml");
     }
 
 
@@ -202,6 +212,136 @@ abstract class CommonFunctions {
         }
         return null;
     }
+
+    // gets the pending payment order for the user
+    protected Orders getOrderWithPendingPayment(int userId){
+        Orders order = null;
+        String query = "SELECT * FROM Orders WHERE userId = ? AND pendingPayment = 1";
+
+        try (Connection connection = BurritoKingApplication.connect();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                order = new Orders(
+                        rs.getDouble("totalPrice"),
+                        rs.getDouble("waitingTime"),
+                        rs.getInt("pendingPayment") == 1,
+                        rs.getInt("orderId"),
+                        rs.getInt("userId")
+                );
+            }
+
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+
+        return order;
+    }
+
+    protected List<Food> getFoodListForOrders(Orders order) {
+        List<Food> foodList = new ArrayList<Food>();
+
+        String query = "SELECT * FROM Food WHERE orderId = ?";
+
+        try (Connection connection = BurritoKingApplication.connect();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, order.getOrderId());
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Food food = new Food(
+                        rs.getInt("orderId"),
+                        rs.getDouble("unitPrice"),
+                        FoodType.valueOf(rs.getString("foodType")),
+                        rs.getInt("quantity")
+                );
+                foodList.add(food);
+            }
+
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+
+        return foodList;
+    }
+
+    // gets all the orders by status and userId. if status is "" then it fetches all the orders irrespective of the orderStatus
+    protected ObservableList<Orders> getOrdersByStatusAndUserID(String status){
+        ObservableList<Orders> orders = FXCollections.observableArrayList();
+        int userId = getIsLoggedInUserId();
+
+        String query;
+        if (status.isEmpty()){
+            query = "SELECT * FROM Orders WHERE userId = ?";
+        } else {
+            query = "SELECT * FROM Orders WHERE orderStatus = ? AND userId = ?";
+        }
+
+        try (Connection connection = BurritoKingApplication.connect();
+
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            if (status.isEmpty()){
+                statement.setInt(1, userId);
+            } else {
+                statement.setString(1, status);
+                statement.setInt(2, userId);
+            }
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Orders order = new Orders(
+                        rs.getDouble("totalPrice"),
+                        rs.getDouble("waitingTime"),
+                        Objects.equals(rs.getString("pendingPayment"), "1"),
+                        rs.getInt("orderId"),
+                        rs.getInt("userId"),
+                        rs.getString("orderStatus"),
+                        rs.getString("timeOrdered"),
+                        rs.getString("dayOrdered"),
+                        rs.getString("collectionTime"),
+                        rs.getString("summaryText")
+                );
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+
+        return orders;
+    }
+
+    // updates the order by orderId and userId
+    protected void updateOrderStatus(String status, int orderId){
+        int userId = getIsLoggedInUserId();
+        try (Connection connection = BurritoKingApplication.connect()) {
+            String query = "UPDATE Orders SET orderStatus = ? WHERE userId = ? AND orderId = ?";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1,  status);
+            statement.setInt(2,  userId);
+            statement.setInt(3,  orderId);
+            int isUpdated = statement.executeUpdate();
+
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+    }
+
 
     // updates user object
     protected void updateUser(User user){
@@ -334,95 +474,7 @@ abstract class CommonFunctions {
         deleteFoodTypeAfterUpsert(foodTypeList, orderId);
     }
 
-    // gets the pending payment order for the user
-    protected Orders getOrderWithPendingPayment(int userId){
-        Orders order = null;
-        String query = "SELECT * FROM Orders WHERE userId = ? AND pendingPayment = 1";
 
-        try (Connection connection = BurritoKingApplication.connect();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, userId);
-            ResultSet rs = statement.executeQuery();
-
-            if (rs.next()) {
-                order = new Orders(
-                        rs.getDouble("totalPrice"),
-                        rs.getDouble("waitingTime"),
-                        rs.getInt("pendingPayment") == 1,
-                        rs.getInt("orderId"),
-                        rs.getInt("userId")
-                );
-            }
-
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": " + e.getMessage());
-        }
-
-        return order;
-    }
-
-    protected List<Food> getFoodListForOrders(Orders order) {
-        List<Food> foodList = new ArrayList<Food>();
-
-        String query = "SELECT * FROM Food WHERE orderId = ?";
-
-        try (Connection connection = BurritoKingApplication.connect();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, order.getOrderId());
-            ResultSet rs = statement.executeQuery();
-
-            while (rs.next()) {
-                Food food = new Food(
-                        rs.getInt("orderId"),
-                        rs.getDouble("unitPrice"),
-                        FoodType.valueOf(rs.getString("foodType")),
-                        rs.getInt("quantity")
-                );
-                foodList.add(food);
-            }
-
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": " + e.getMessage());
-        }
-
-        return foodList;
-    }
-
-    // gets all the orders by status
-    protected ObservableList<Orders> getOrdersByStatus(String status){
-        ObservableList<Orders> orders = FXCollections.observableArrayList();
-
-        String query = "SELECT * FROM Orders WHERE orderStatus = ?";
-
-        try (Connection connection = BurritoKingApplication.connect();
-
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, status);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Orders order = new Orders(
-                        rs.getDouble("totalPrice"),
-                        rs.getInt("orderId"),
-                        rs.getString("orderStatus"),
-                        rs.getString("summaryText")
-                );
-                orders.add(order);
-            }
-
-        } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(
-                    Level.SEVERE,
-                    LocalDateTime.now() + ": " + e.getMessage());
-        }
-
-        return orders;
-    }
 
     // Method to show an alert
     protected void showErrorAlert(String title, String message) {
@@ -498,16 +550,24 @@ abstract class CommonFunctions {
         stage.show();
     }
 
-    // updates orders table to set pending payment = 0 to confirm the payment
+    // updates orders table to set pending payment = 0 to confirm the payment and also set other meta data like day time
     protected void confirmPayment(String timeOrdered){
         int userId = getIsLoggedInUserId();
 
         try (Connection connection = BurritoKingApplication.connect()) {
-                String query = "UPDATE Orders SET orderStatus = 'await for collection', pendingPayment = 0, timeOrdered = ?  WHERE userId = ? AND pendingPayment = 1";
+                String query = "UPDATE Orders SET orderStatus = 'await for collection', pendingPayment = 0, timeOrdered = ?, dayOrdered = ?  WHERE userId = ? AND pendingPayment = 1";
                 assert connection != null;
                 PreparedStatement statement = connection.prepareStatement(query);
                 statement.setString(1, timeOrdered);
-                statement.setInt(2, userId);
+                // Get today's date in the desired format - 22 May 2024
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                String formattedDate = today.format(formatter);
+
+                // Set the dayOrdered parameter
+                statement.setString(2, formattedDate);
+
+                statement.setInt(3, userId);
                 statement.executeUpdate();
             } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -515,7 +575,7 @@ abstract class CommonFunctions {
     }
 
 
-    // Shows confirmation alert and returns the time if user wants to enter a new one
+    // Shows confirmation alert and returns the time if the user wants to enter a new one
     protected LocalTime showConfirmationAlertForFetchingCurrentTime(String title, String message, String formattedTime) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -526,26 +586,36 @@ abstract class CommonFunctions {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // User chose OK, prompt for new time
-            TextInputDialog dialog = new TextInputDialog(formattedTime);
-            dialog.setTitle("Enter New Time");
-            dialog.setHeaderText("Change Time");
-            dialog.setContentText("Please enter the new time (HH:mm) example 11:23");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime newTime = null;
 
-            Optional<String> newTimeResult = dialog.showAndWait();
+            while (newTime == null) {
+                TextInputDialog dialog = new TextInputDialog(formattedTime);
+                dialog.setTitle("Enter New Time");
+                dialog.setHeaderText("Change Time");
+                dialog.setContentText("Please enter the new time (HH:mm), example 23:23");
 
-            if (newTimeResult.isPresent()) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                    LocalTime newTime = LocalTime.parse(newTimeResult.get(), formatter);
-                    return newTime;
-                } catch (Exception e) {
-                    // Handle invalid time format
-                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                    errorAlert.setTitle("Invalid Time Format");
-                    errorAlert.setHeaderText(null);
-                    errorAlert.setContentText("The time you entered is not valid. Please enter the time in HH:mm format.");
-                    errorAlert.showAndWait();
+                Optional<String> newTimeResult = dialog.showAndWait();
+
+                if (newTimeResult.isPresent()) {
+                    try {
+                        newTime = LocalTime.parse(newTimeResult.get(), formatter);
+                    } catch (Exception e) {
+                        // Handle invalid time format
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Invalid Time Format");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("The time you entered is not valid. Please enter the time in HH:mm format.");
+                        errorAlert.showAndWait();
+                    }
+                } else {
+                    // User cancelled the input dialog
+                    break;
                 }
+            }
+
+            if (newTime != null) {
+                return newTime;
             }
         }
 

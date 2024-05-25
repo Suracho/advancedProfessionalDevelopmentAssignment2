@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingNonVipDashboardController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingViewAllOrdersDashboardController">
    <children>
       <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
@@ -56,49 +56,30 @@
                         <Font name="Georgia Bold Italic" size="23.0" />
                      </font>
                   </Label>
-                  <Button id="loginButton" fx:id="editProfile" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="502.0" mnemonicParsing="false" onMouseClicked="#switchToEditProfileScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Edit Profile">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button id="loginButton" fx:id="addFood" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="448.0" mnemonicParsing="false" onMouseClicked="#switchToNonVipOrderDashboardScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Add Food">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button id="loginButton" fx:id="viewAllOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="388.0" mnemonicParsing="false" onAction="#proceedToViewAllOrdersScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="View All Order">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
                   <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button id="loginButton" fx:id="collectOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="74.0" layoutY="336.0" mnemonicParsing="false" onAction="#proceedToCollectOrderScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Collect Order">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button id="loginButton" fx:id="upgradeToVip" alignment="CENTER" contentDisplay="CENTER" layoutX="74.0" layoutY="553.0" mnemonicParsing="false" onAction="#upgradeToVip" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Upgrade To Vip">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <TableView fx:id="orderSummaryTable" layoutX="18.0" layoutY="99.0" prefHeight="200.0" prefWidth="593.0">
+                  <TableView fx:id="orderSummaryTable" layoutX="18.0" layoutY="99.0" prefHeight="424.0" prefWidth="593.0">
                      <columns>
                         <TableColumn fx:id="orderIdColumn" prefWidth="58.0" text="Order Id" />
-                        <TableColumn fx:id="orderSummaryColumn" prefWidth="314.0" text="Order Summary" />
-                        <TableColumn fx:id="totalPriceColumn" prefWidth="102.0" text="Total Price" />
-                        <TableColumn fx:id="orderStatusColumn" prefWidth="118.0" text="Order Status" />
+                        <TableColumn fx:id="timeColumn" prefWidth="95.0" text="Order Time" />
+                        <TableColumn fx:id="dayColumn" prefWidth="107.0" text="Order Day" />
+                        <TableColumn fx:id="totalPriceColumn" prefWidth="97.0" text="Total Price" />
+                        <TableColumn fx:id="orderStatusColumn" minWidth="0.0" prefWidth="310.0" text="Order Status" />
                      </columns>
                   </TableView>
-                  <Label alignment="CENTER" layoutX="65.0" layoutY="65.0" prefHeight="26.0" prefWidth="458.0" style="-fx-text-fill: #FFFFFF;" text="These orders are awaiting Collection" textAlignment="CENTER" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="65.0" layoutY="65.0" prefHeight="26.0" prefWidth="458.0" style="-fx-text-fill: #FFFFFF;" text="All Orders" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="23.0" />
                      </font>
                   </Label>
+                  <Button id="loginButton" fx:id="homePageButton" alignment="CENTER" contentDisplay="CENTER" layoutX="222.0" layoutY="544.0" mnemonicParsing="false" onAction="#proceedToHome" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Go Back to Home Page" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </items>
