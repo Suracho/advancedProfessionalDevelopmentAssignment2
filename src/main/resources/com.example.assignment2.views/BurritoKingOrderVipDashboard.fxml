@@ -1,14 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.assignment2.controllers.BurritoKingOrderVipDashboardController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingOrderVipDashboardController">
+   <children>
+      <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <items>
+            <AnchorPane style="-fx-background-color: #000000;">
+               <children>
+                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <TextField editable="false" layoutX="15.0" layoutY="408.0" opacity="0.89" prefHeight="25.0" prefWidth="262.0" promptText="This is an application for Burrito King" style="-fx-background-color: #000000; -fx-text-fill: #FFFFFF;" text="Burrito King Restaurant">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="18.0" />
+                     </font>
+                  </TextField>
+                  <ImageView fitHeight="211.0" fitWidth="257.0" layoutX="33.0" layoutY="425.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../BurritoKing.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" style="-fx-background-color: #032152;">
+               <children>
+                  <Polygon fill="#e82700" layoutX="50.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="507.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="441.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="370.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="294.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="210.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="131.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fill="#e82700" layoutX="572.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutX="27.0" layoutY="22.0" prefHeight="26.0" prefWidth="349.0" style="-fx-text-fill: #FFFFFF;" text="Welcome to Burrito King!" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="119.0" fitWidth="134.0" layoutX="43.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../burrito.png" />
+                     </image>
+                  </ImageView>
+                  <Line endX="49.5" layoutX="128.0" layoutY="127.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.0" layoutX="217.0" layoutY="195.0" startX="-37.0" startY="40.95051574707031" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-67.75930786132812" layoutX="64.0" layoutY="195.0" startX="-37.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="60.5" endY="-50.0" layoutX="118.0" layoutY="286.0" startX="-88.5" startY="-50.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <ImageView fitHeight="83.0" fitWidth="76.0" layoutX="247.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../fries.png" />
+                     </image>
+                  </ImageView>
+                  <Line endX="49.5" layoutX="314.0" layoutY="127.0" startX="-101.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.0" layoutX="403.0" layoutY="195.0" startX="-36.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-65.5" layoutX="250.0" layoutY="195.0" startX="-37.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="60.5" endY="-50.0" layoutX="304.0" layoutY="286.0" startX="-88.5" startY="-50.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <ImageView fitHeight="119.0" fitWidth="134.0" layoutX="417.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../soda.png" />
+                     </image>
+                  </ImageView>
+                  <Line endX="49.5" layoutX="502.0" layoutY="125.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.0" layoutX="591.0" layoutY="193.0" startX="-36.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.1447982788086" layoutX="438.0" layoutY="193.0" startX="-37.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="60.5" endY="-50.0" layoutX="492.0" layoutY="284.0" startX="-88.5" startY="-50.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Button fx:id="burritoPlus" layoutX="68.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementBurrito" text="+" />
+                  <Button fx:id="burritoMinus" layoutX="151.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementBurrito" text="-" />
+                  <Button fx:id="friesPlus" layoutX="248.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementFries" text="+" />
+                  <Button fx:id="friesMinus" layoutX="333.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementFries" text="-" />
+                  <Button fx:id="sodaPlus" layoutX="428.0" layoutY="267.0" mnemonicParsing="false" onAction="#incrementSoda" text="+" />
+                  <Button fx:id="sodaMinus" layoutX="515.0" layoutY="267.0" mnemonicParsing="false" onAction="#decrementSoda" text="-" />
+                  <Button id="loginButton" fx:id="addToOrderButton" alignment="CENTER" contentDisplay="CENTER" layoutX="237.0" layoutY="505.0" mnemonicParsing="false" onAction="#addOrderToDatabase" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Add to cart" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="burritoLabel" alignment="CENTER" layoutX="37.0" layoutY="88.0" prefHeight="26.0" prefWidth="136.0" style="-fx-text-fill: #FFFFFF;" text="Burrito" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="friesLabel" alignment="CENTER" layoutX="215.0" layoutY="88.0" prefHeight="26.0" prefWidth="136.0" style="-fx-text-fill: #FFFFFF;" text="Fries" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="sodaLabel" alignment="CENTER" layoutX="408.0" layoutY="88.0" prefHeight="26.0" prefWidth="136.0" style="-fx-text-fill: #FFFFFF;" text="Soda" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="friesCount" alignment="CENTER" layoutX="282.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <TextField fx:id="burritoCount" alignment="CENTER" layoutX="103.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <TextField fx:id="sodaCount" alignment="CENTER" layoutX="466.0" layoutY="267.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <Line endX="49.5" layoutX="241.0" layoutY="341.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="49.5" layoutX="395.0" layoutY="341.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.0" layoutX="483.0" layoutY="409.0" startX="-36.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="49.5" layoutX="244.0" layoutY="451.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="49.5" layoutX="396.0" layoutY="451.0" startX="-100.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <Line endX="-37.0" endY="-68.0" layoutX="178.0" layoutY="409.0" startX="-36.0" startY="41.0" stroke="#dddb32" strokeWidth="5.0" />
+                  <ImageView fitHeight="119.0" fitWidth="134.0" layoutX="188.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../burrito.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="83.0" fitWidth="76.0" layoutX="258.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../fries.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="119.0" fitWidth="134.0" layoutX="278.0" layoutY="328.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../soda.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="MealLabel" alignment="CENTER" layoutX="219.0" layoutY="305.0" prefHeight="26.0" prefWidth="136.0" style="-fx-text-fill: #FFFFFF;" text="Meal" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="mealPlus" layoutX="235.0" layoutY="459.0" mnemonicParsing="false" onAction="#incrementMeal" text="+" />
+                  <TextField fx:id="mealCount" alignment="CENTER" layoutX="274.0" layoutY="459.0" prefHeight="26.0" prefWidth="43.0" text="0" />
+                  <Button fx:id="mealMinus" layoutX="333.0" layoutY="459.0" mnemonicParsing="false" onAction="#decrementMeal" text="-" />
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

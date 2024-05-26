@@ -3,7 +3,6 @@ package com.example.assignment2.controllers;
 import com.example.assignment2.models.ActionButtonTableCell;
 import com.example.assignment2.models.OrderStatus;
 import com.example.assignment2.models.Orders;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableCell;
@@ -12,6 +11,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 // This is the controller class for Collect order View
@@ -44,6 +45,8 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
         // Define actions for collect and cancel buttons
         Consumer<Integer> collectAction = orderId -> {
             // Handle collect order logic here
+            String displayedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+            showConfirmationAlertDuringCollection(displayedTime, orderId);
             updateOrderStatus(OrderStatus.COLLECTED.toString(), orderId);
             refreshTable();
         };

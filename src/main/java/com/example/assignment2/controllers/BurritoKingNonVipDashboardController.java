@@ -60,27 +60,7 @@ public class BurritoKingNonVipDashboardController extends CommonFunctions{
     }
 
 
-    // function to switch to edit profile screens
-    @FXML
-    protected void switchToEditProfileScreen(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingEditProfile.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    // function to switch to Non Vip Order Dashboard screen
-    @FXML
-    protected void switchToNonVipOrderDashboardScreen(MouseEvent mouseEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingOrderNonVipDashboard.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
 
     // function which upgrades the user to vip
     @FXML

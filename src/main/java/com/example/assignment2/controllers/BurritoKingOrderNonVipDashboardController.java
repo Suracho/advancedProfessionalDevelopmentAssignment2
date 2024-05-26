@@ -3,14 +3,11 @@ package com.example.assignment2.controllers;
 import com.example.assignment2.models.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.List;
-
-import static com.example.assignment2.controllers.BurritoKingApplication.getMenu;
 
 // This is the Controller class for managing the Burrito King Order Non-VIP Dashboard. It contains increment decrement logic and add to cart logic
 public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
@@ -148,7 +145,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
         Order order = Restaurant.getAllOrders().getLast();
         Double waitingTime = order.getPrepTime(BurritoKingApplication.getRestaurant());
 
-        int orderId = upsertOrderInDb(true, totalPrice, waitingTime, summaryText);
+        int orderId = upsertOrderInDb(totalPrice, waitingTime, summaryText);
         upsertFoodItemsInDb(order, orderId);
         proceedToCartScreen(summaryText);
     }
