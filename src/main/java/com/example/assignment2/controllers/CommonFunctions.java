@@ -43,15 +43,17 @@ abstract class CommonFunctions {
         }
     }
 
+
+
     // Function to switch screen payment screen
     @FXML
-    protected void proceedToPaymentScreen() throws IOException {
-        changeScreen("/com.example.assignment2.views/BurritoKingPaymentScreen.fxml");
+    protected void proceedToPaymentScreen(int credits) throws IOException {
+        changeScreen("/com.example.assignment2.views/BurritoKingPaymentScreen.fxml", credits);
     }
 
     // Method to change screens and pass data to the controller
     @FXML
-    private void changeScreenWithController(String fxmlFile, String data) throws IOException {
+    private void changeScreenWithController(String fxmlFile, String data, Double paymentAmount) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -62,7 +64,7 @@ abstract class CommonFunctions {
         // Pass data to the controller
         Object controller = fxmlLoader.getController();
         if (controller instanceof BurritoKingCartController) {
-            ((BurritoKingCartController) controller).initData(data);
+            ((BurritoKingCartController) controller).initData(data, paymentAmount);
         }
     }
 
@@ -83,12 +85,10 @@ abstract class CommonFunctions {
         stage.show();
     }
 
-
-
     // Function to switch screen proceedToHome
     @FXML
-    protected void proceedToCartScreen(String summaryText) throws IOException {
-        changeScreenWithController("/com.example.assignment2.views/BurritoKingCart.fxml", summaryText);
+    protected void proceedToCartScreen(String summaryText, Double paymentAmount) throws IOException {
+        changeScreenWithController("/com.example.assignment2.views/BurritoKingCart.fxml", summaryText, paymentAmount);
     }
 
     // Function to switch screen proceedToViewAllOrders
@@ -103,6 +103,29 @@ abstract class CommonFunctions {
         changeScreen("/com.example.assignment2.views/BurritoKingCollectOrder.fxml");
     }
 
+    // Method to change screens and pass credits to the new controller
+    protected void changeScreen(String fxmlFile, int credits) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource(fxmlFile));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        // Get the controller and pass the credits
+        BurritoKingPaymentScreen controller = fxmlLoader.getController();
+        controller.setCredits(credits);
+
+        Stage stage = (Stage) Stage.getWindows().filtered(window -> window.isShowing()).get(0);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    // Method to change screens
+    protected void changeScreen(String fxmlFile) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource(fxmlFile));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) Stage.getWindows().filtered(window -> window.isShowing()).get(0);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 
     // Function to switch screen proceedToHome
@@ -418,20 +441,24 @@ abstract class CommonFunctions {
         }
     }
 
-    // gets previous credits and after addition , updates credits for the logged in user
-    protected void updateCredits(Integer credits){
+    // updates credits for the logged in user
+    protected void updateCredits(Integer credits) throws Exception {
         User loggedInUser = getIsLoggedInUser();
+        int userId = loggedInUser.getUserId();
 
-        Credits credits1 = getCreditsForUser(loggedInUser.getUserId());
+        // checks if user is a vip or not, if not the aborts the update function
+        if (!checkIsVip(userId)){
+            return;
+        }
 
-        credits += credits1.getCredits();
+        credits = calculateCredits(credits, userId);
 
         try (Connection connection = BurritoKingApplication.connect()) {
             String query = "UPDATE Credits SET credits = ? WHERE userId = ?";
             assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1,  credits);
-            statement.setInt(2,  loggedInUser.getUserId());
+            statement.setInt(2,  userId);
             int isUpdated = statement.executeUpdate();
 
             connection.close();
@@ -473,7 +500,6 @@ abstract class CommonFunctions {
                 statement.setString(5, summaryText);
                 statement.setInt(6, orders.getOrderId());
             }
-            assert connection != null;
 
 
             // Execute the update
@@ -682,14 +708,7 @@ abstract class CommonFunctions {
         }
     }
 
-    // Method to change screens
-    protected void changeScreen(String fxmlFile) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource(fxmlFile));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) Stage.getWindows().filtered(window -> window.isShowing()).get(0);
-        stage.setScene(scene);
-        stage.show();
-    }
+
 
     // updates orders table to set pending payment = 0 to confirm the payment and also set other meta data like day time
     protected void confirmPayment(String timeOrdered){
@@ -986,6 +1005,11 @@ abstract class CommonFunctions {
     private LocalTime calculateCollectTime(LocalTime timeOrdered, double waitingTimeInMinutes) {
         Duration waitingDuration = Duration.ofMinutes((long) waitingTimeInMinutes);
         return timeOrdered.plus(waitingDuration);
+    }
+
+    private Integer calculateCredits(int credits, int userId){
+        int currentCredits = getCreditsForUser(userId).getCredits();
+        return credits += currentCredits;
     }
 
 }

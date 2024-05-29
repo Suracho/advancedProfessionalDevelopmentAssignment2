@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,6 +27,14 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
 
     @FXML
     private TextField cvv;
+
+    // credits earned by the customer
+    private int credits;
+
+    // Method to set credits
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/yyyy");
 
@@ -96,6 +105,13 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
         });
     }
 
+    // Function to fetch the card details and confirm the payment as done in database
+    @FXML
+    protected void proceedToPaymentScreenClickMethod() throws IOException {
+        proceedToPaymentScreen(this.credits);
+    }
+
+
 
     // Function to fetch the card details and confirm the payment as done in database
     @FXML
@@ -121,6 +137,10 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
         String formattedLt = lt.toString();
 
         confirmPayment(formattedLt);
+
+        updateCredits(this.credits);
         proceedToHome();
     }
+
+
 }

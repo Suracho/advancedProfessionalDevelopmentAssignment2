@@ -147,7 +147,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
 
         int orderId = upsertOrderInDb(totalPrice, waitingTime, summaryText);
         upsertFoodItemsInDb(order, orderId);
-        proceedToCartScreen(summaryText);
+        proceedToCartScreen(summaryText, totalPrice);
     }
 
     // Disables the plus button if the label's text is "100".

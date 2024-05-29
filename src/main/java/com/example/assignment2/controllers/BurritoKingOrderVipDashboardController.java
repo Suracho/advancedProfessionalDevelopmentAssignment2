@@ -223,10 +223,7 @@ public class BurritoKingOrderVipDashboardController extends CommonFunctions{
         int orderId = upsertOrderInDb(totalPrice, waitingTime, summaryText);
         upsertFoodItemsInDb(order, orderId);
 
-        // update credits
-        updateCredits((int) Math.floor(totalPrice));
-
-        proceedToCartScreen(summaryText);
+        proceedToCartScreen(summaryText, totalPrice);
     }
 
 }
