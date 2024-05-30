@@ -56,6 +56,7 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
             updateOrderStatus(OrderStatus.CANCELLED.toString(), orderId);
             try {
                 refundCreditsAfterCancellation(orderId);
+                reduceOrderCreditsAfterCancellation(orderId);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

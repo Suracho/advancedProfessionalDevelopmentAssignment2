@@ -63,9 +63,13 @@ public class BurritoKingRedeemCreditsControllers extends CommonFunctions{
 
     private void setValues(){
         User user = getIsLoggedInUser();
+        int userId = user.getUserId();
         // gets credits and then sets it
-        Credits credits = getCreditsForUser(user.getUserId());
+        Credits credits = getCreditsForUser(userId);
         setCredits(credits);
+
+        Orders orders = getOrderWithPendingPayment(userId);
+        this.setPaymentAmount(orders.getTotalPrice());
         creditsNumberLabel.setText("Credits: " + this.credits.getCredits().toString() + " and your final payment amount is " + this.paymentAmount);
     }
 

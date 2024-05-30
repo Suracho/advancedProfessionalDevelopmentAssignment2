@@ -19,12 +19,12 @@
          <items>
             <AnchorPane style="-fx-background-color: #000000;">
                <children>
-                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0">
+                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0">
+                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="21.0" />
                      </font>
