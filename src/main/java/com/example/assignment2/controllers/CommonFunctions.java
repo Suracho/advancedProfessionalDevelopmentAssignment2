@@ -43,14 +43,6 @@ abstract class CommonFunctions {
         }
     }
 
-
-
-    // Function to switch screen payment screen
-    @FXML
-    protected void proceedToPaymentScreen(int credits) throws IOException {
-        changeScreen("/com.example.assignment2.views/BurritoKingPaymentScreen.fxml", credits);
-    }
-
     // Method to change screens and pass data to the controller
     @FXML
     private void changeScreenWithController(String fxmlFile, String data, Double paymentAmount) throws IOException {
@@ -104,14 +96,46 @@ abstract class CommonFunctions {
     }
 
     // Method to change screens and pass credits to the new controller
-    protected void changeScreen(String fxmlFile, int credits) throws IOException {
+    protected void changeScreen(int credits, Double paymentAmount) throws Exception {
+        String fxmlFile = "";
+        int userId = getIsLoggedInUserId();
+        if (checkIsVip(userId)){
+            fxmlFile = "/com.example.assignment2.views/BurritoKingRedeemCredits.fxml";
+        } else {
+            fxmlFile = "/com.example.assignment2.views/BurritoKingPaymentScreen.fxml";
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource(fxmlFile));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        if (checkIsVip(userId)){
+            // Get the controller and pass the credits
+            BurritoKingRedeemCreditsControllers controller = fxmlLoader.getController();
+            controller.setPaymentAmount(paymentAmount);
+            controller.initialize();
+        } else {
+            // Get the controller and pass the credits
+            BurritoKingPaymentScreenController controllerPs = fxmlLoader.getController();
+            controllerPs.setCredits(credits);
+        }
+
+
+        Stage stage = (Stage) Stage.getWindows().filtered(window -> window.isShowing()).get(0);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // Method to change screens and pass credits to the new controller
+    protected void changeScreenFromRedeemToPayment(int credits) throws Exception {
+        String fxmlFile = "/com.example.assignment2.views/BurritoKingPaymentScreen.fxml";
+
         FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource(fxmlFile));
         Scene scene = new Scene(fxmlLoader.load());
 
         // Get the controller and pass the credits
-        BurritoKingPaymentScreen controller = fxmlLoader.getController();
-        controller.setCredits(credits);
-
+        BurritoKingPaymentScreenController controllerPs = fxmlLoader.getController();
+        controllerPs.setCredits(credits);
+        controllerPs.initialize();
         Stage stage = (Stage) Stage.getWindows().filtered(window -> window.isShowing()).get(0);
         stage.setScene(scene);
         stage.show();
@@ -279,7 +303,8 @@ abstract class CommonFunctions {
                         rs.getString("timeOrdered"),
                         rs.getString("dayOrdered"),
                         rs.getString("collectionTime"),
-                        rs.getString("summaryText")
+                        rs.getString("summaryText"),
+                        rs.getInt("creditsApplied")
                 );
             }
 
@@ -357,7 +382,8 @@ abstract class CommonFunctions {
                         rs.getString("timeOrdered"),
                         rs.getString("dayOrdered"),
                         rs.getString("collectionTime"),
-                        rs.getString("summaryText")
+                        rs.getString("summaryText"),
+                        rs.getInt("creditsApplied")
                 );
                 orders.add(order);
             }
@@ -451,7 +477,7 @@ abstract class CommonFunctions {
             return;
         }
 
-        credits = calculateCredits(credits, userId);
+        credits = addCredits(credits, userId);
 
         try (Connection connection = BurritoKingApplication.connect()) {
             String query = "UPDATE Credits SET credits = ? WHERE userId = ?";
@@ -784,6 +810,55 @@ abstract class CommonFunctions {
     }
 
 
+    // function to redeemCredits
+    protected void redeemCredits(Double paymentAmount, int credits) throws Exception {
+        int userId = getIsLoggedInUserId();
+
+        // calculates final paymentAmount
+        Double finalPaymentAmount = calculatePaymentAmountAfterCreditsRedemption(credits, paymentAmount);
+
+        Orders orders =  getOrderWithPendingPayment(userId);
+        updateTotalPrice(finalPaymentAmount, orders.getOrderId());
+
+        Integer creditsApplied = credits - (credits % 100);
+
+        // updates credits for the user by subtracting from final credits
+        Integer finalCredits = minusCredits(creditsApplied, userId);
+
+        updateCredits(finalCredits);
+        // updates creditsApplied column in orders
+        updateCreditsAppliedInOrders(creditsApplied, orders.getOrderId());
+    }
+
+    protected void refundCreditsAfterCancellation(int orderId) throws Exception {
+        // gets the order for knowing the credits
+        Orders orders = getOrderByOrderId(orderId);
+
+        Integer creditsApplied = orders.getCreditsApplied();
+
+        updateCredits(creditsApplied);
+    }
+
+
+    // updates total price
+    private void updateTotalPrice(Double paymentAmount, int orderId){
+        try (Connection connection = BurritoKingApplication.connect()) {
+
+            String query = "UPDATE Orders SET totalPrice = ? WHERE orderId = ?";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setDouble(1, paymentAmount);
+            statement.setInt(2, orderId);
+            statement.executeUpdate();
+
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+    }
+
     // function to update the vip status of the user
     private void updateVipStatusInUserAndInsertAVipUser(int userId, String emailAddress, boolean isLoginPage) {
         int isUpdated = 1;
@@ -837,7 +912,24 @@ abstract class CommonFunctions {
         }
     }
 
+    // function to update the collection Time of the order
+    private void updateCreditsAppliedInOrders(int finalCredits, int orderId) {
+        try (Connection connection = BurritoKingApplication.connect()) {
 
+            String query = "UPDATE Orders SET creditsApplied = ? WHERE orderId = ?";
+            assert connection != null;
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, finalCredits);
+            statement.setInt(2, orderId);
+            statement.executeUpdate();
+
+            connection.close();
+        } catch (SQLException e) {
+            Logger.getAnonymousLogger().log(
+                    Level.SEVERE,
+                    LocalDateTime.now() + ": " + e.getMessage());
+        }
+    }
 
 
     // sets isLoggedIn to false for all user
@@ -880,7 +972,8 @@ abstract class CommonFunctions {
                         rs.getString("timeOrdered"),
                         rs.getString("dayOrdered"),
                         rs.getString("collectionTime"),
-                        rs.getString("summaryText")
+                        rs.getString("summaryText"),
+                        rs.getInt("creditsApplied")
                 );
             }
 
@@ -1007,9 +1100,21 @@ abstract class CommonFunctions {
         return timeOrdered.plus(waitingDuration);
     }
 
-    private Integer calculateCredits(int credits, int userId){
+    // calculates credits from the user credits in database
+    private Integer addCredits(int credits, int userId){
         int currentCredits = getCreditsForUser(userId).getCredits();
         return credits += currentCredits;
+    }
+
+    // calculates credits from the user credits in database
+    private Integer minusCredits(int credits, int userId){
+        int currentCredits = getCreditsForUser(userId).getCredits();
+        return currentCredits -= credits;
+    }
+
+    // calculate payment amount after user clicks the redeem credits button
+    private Double calculatePaymentAmountAfterCreditsRedemption(int credits, Double paymentAmount){
+        return paymentAmount - (credits / 100);
     }
 
 }

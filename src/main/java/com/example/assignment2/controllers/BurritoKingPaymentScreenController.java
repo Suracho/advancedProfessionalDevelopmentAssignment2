@@ -1,7 +1,6 @@
 package com.example.assignment2.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -15,10 +14,9 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 // This is the Controller class for Payment. It contains validation logics for credit card text fields
-public class BurritoKingPaymentScreen extends CommonFunctions{
+public class BurritoKingPaymentScreenController extends CommonFunctions{
     @FXML
     private DatePicker expiryDate;
 
@@ -103,12 +101,6 @@ public class BurritoKingPaymentScreen extends CommonFunctions{
                 };
             }
         });
-    }
-
-    // Function to fetch the card details and confirm the payment as done in database
-    @FXML
-    protected void proceedToPaymentScreenClickMethod() throws IOException {
-        proceedToPaymentScreen(this.credits);
     }
 
 

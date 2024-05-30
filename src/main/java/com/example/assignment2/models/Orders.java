@@ -13,15 +13,10 @@ public class Orders {
     private String dayOrdered;
     private String collectionTime;
     private String summaryText;
+    private Integer creditsApplied;
 
-    public Orders(Double totalPrice, Integer orderId, String orderStatus, String summaryText) {
-        this.totalPrice = totalPrice;
-        this.orderId = orderId;
-        this.orderStatus = orderStatus;
-        this.summaryText = summaryText;
-    }
 
-    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText) {
+    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText, Integer creditsApplied) {
         this.totalPrice = totalPrice;
         this.waitingTime = waitingTime;
         this.pendingPayment = pendingPayment;
@@ -32,23 +27,7 @@ public class Orders {
         this.dayOrdered = dayOrdered;
         this.collectionTime = collectionTime;
         this.summaryText = summaryText;
-    }
-
-    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId) {
-        this.totalPrice = totalPrice;
-        this.waitingTime = waitingTime;
-        this.pendingPayment = pendingPayment;
-        this.orderId = orderId;
-        this.userId = userId;
-    }
-
-    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus) {
-        this.totalPrice = totalPrice;
-        this.waitingTime = waitingTime;
-        this.pendingPayment = pendingPayment;
-        this.orderId = orderId;
-        this.userId = userId;
-        this.orderStatus = orderStatus;
+        this.creditsApplied = creditsApplied;
     }
 
     public String getOrderStatus() {
@@ -130,5 +109,13 @@ public class Orders {
 
     public void setSummaryText(String summaryText) {
         this.summaryText = summaryText;
+    }
+
+    public Integer getCreditsApplied() {
+        return creditsApplied;
+    }
+
+    public void setCreditsApplied(Integer creditsApplied) {
+        this.creditsApplied = creditsApplied;
     }
 }

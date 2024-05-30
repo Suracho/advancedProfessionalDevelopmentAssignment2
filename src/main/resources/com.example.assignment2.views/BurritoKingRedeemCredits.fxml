@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
@@ -12,9 +11,9 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingPaymentScreenController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingRedeemCreditsControllers">
    <children>
-      <SplitPane dividerPositions="0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
             <AnchorPane style="-fx-background-color: #000000;">
                <children>
@@ -50,19 +49,41 @@
                   <Polygon fill="#e82700" layoutX="210.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fill="#e82700" layoutX="131.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fill="#e82700" layoutX="572.0" layoutY="597.0" points="-50.0, 40.0, 50.0, 40.0, -1.5, 10.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutX="50.0" layoutY="68.0" prefHeight="26.0" prefWidth="349.0" style="-fx-text-fill: #FFFFFF;" text="Redeem Credits" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
                   <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="cardNumber" layoutX="230.0" layoutY="119.0" promptText="16 digits card number" />
-                  <TextField fx:id="cvv" layoutX="230.0" layoutY="204.0" promptText="CVV" />
-                  <DatePicker fx:id="expiryDate" layoutX="227.0" layoutY="162.0" prefHeight="26.0" prefWidth="160.0" />
-                  <Button id="loginButton" fx:id="paymentButton" alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="262.0" mnemonicParsing="false" onAction="#confirmPayment" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Pay" textFill="#e82a0d">
+                  <Button id="updateButton" fx:id="proceedToCartButton" alignment="CENTER" contentDisplay="CENTER" layoutX="393.0" layoutY="400.0" mnemonicParsing="false" onAction="#proceedToPaymentScreen" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Proceed To Payment" textFill="#e82a0d">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Button>
+                  <Label fx:id="paymentSummaryLabel" layoutX="15.0" layoutY="361.0" prefHeight="46.0" prefWidth="591.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="creditsNumberLabel" alignment="CENTER" layoutX="26.0" layoutY="138.0" prefHeight="132.0" prefWidth="591.0" style="-fx-text-fill: #FFFFFF;" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Button id="updateButton" fx:id="redeemCredits" alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="400.0" mnemonicParsing="false" onAction="#redeemCreditsClickMethod" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Redeem Credits" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="notEnoughCreditsLabel" alignment="CENTER" layoutX="19.0" layoutY="319.0" prefHeight="46.0" prefWidth="591.0" style="-fx-text-fill: #FFFFFF;" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </items>

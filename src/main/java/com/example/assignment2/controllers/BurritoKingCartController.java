@@ -63,7 +63,7 @@ public class BurritoKingCartController extends CommonFunctions{
 
     // Function to switch screen payment screen
     @FXML
-    protected void proceedToPaymentScreen() throws IOException {
-        changeScreen("/com.example.assignment2.views/BurritoKingPaymentScreen.fxml", (int) Math.floor(this.paymentAmount));
+    protected void proceedToPaymentScreen() throws Exception {
+        changeScreen((int) Math.floor(this.paymentAmount), this.paymentAmount);
     }
 }

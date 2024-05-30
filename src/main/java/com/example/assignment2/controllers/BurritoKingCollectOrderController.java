@@ -54,6 +54,11 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
         Consumer<Integer> cancelAction = orderId -> {
             // Handle cancel order logic here
             updateOrderStatus(OrderStatus.CANCELLED.toString(), orderId);
+            try {
+                refundCreditsAfterCancellation(orderId);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             refreshTable();
         };
 
