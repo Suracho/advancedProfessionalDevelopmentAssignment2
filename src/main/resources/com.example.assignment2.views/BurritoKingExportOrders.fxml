@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="763.0" prefWidth="917.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment2.controllers.BurritoKingExportOrdersController">
+   <children>
+      <SplitPane dividerPositions="0.3" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <items>
+            <AnchorPane style="-fx-background-color: #000000;">
+               <children>
+                  <Label id="firstName" fx:id="firstName" layoutX="41.0" layoutY="88.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label id="lastName" fx:id="lastName" layoutX="41.0" layoutY="147.0" prefHeight="17.0" prefWidth="196.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <TextField editable="false" layoutX="15.0" layoutY="408.0" opacity="0.89" prefHeight="25.0" prefWidth="262.0" promptText="This is an application for Burrito King" style="-fx-background-color: #000000; -fx-text-fill: #FFFFFF;" text="Burrito King Restaurant">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="18.0" />
+                     </font>
+                  </TextField>
+                  <ImageView fitHeight="211.0" fitWidth="257.0" layoutX="33.0" layoutY="425.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../BurritoKing.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" style="-fx-background-color: #032152;">
+               <children>
+                  <Button id="loginButton" fx:id="homePageButton" alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="700.0" mnemonicParsing="false" onAction="#proceedToHome" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Go Back to Home Page" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label alignment="CENTER" layoutX="27.0" layoutY="22.0" prefHeight="26.0" prefWidth="349.0" style="-fx-text-fill: #FFFFFF;" text="Export Orders" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font name="Georgia Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" contentDisplay="CENTER" layoutX="515.0" layoutY="-3.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="114.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="logout" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button id="updateButton" fx:id="exportOrdersButton" alignment="CENTER" contentDisplay="CENTER" layoutX="378.0" layoutY="700.0" mnemonicParsing="false" onAction="#exportOrders" prefHeight="35.0" prefWidth="196.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Export Orders" textFill="#e82a0d">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="paymentSummaryLabel" layoutX="15.0" layoutY="361.0" prefHeight="46.0" prefWidth="591.0" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="orderSummaryTable" layoutX="19.0" layoutY="73.0" prefHeight="282.0" prefWidth="593.0">
+                     <columns>
+                        <TableColumn fx:id="selectCheckboxesColumn" prefWidth="55.0" text="Select" />
+                        <TableColumn fx:id="orderIdColumn" prefWidth="121.0" text="Order Id" />
+                        <TableColumn fx:id="dayColumn" prefWidth="107.0" text="Order Day" />
+                        <TableColumn fx:id="totalPriceColumn" prefWidth="97.0" text="Total Price" />
+                        <TableColumn fx:id="orderStatusColumn" minWidth="0.0" prefWidth="250.0" text="Order Status" />
+                     </columns>
+                  </TableView>
+                  <ListView fx:id="orderColumnsListView" layoutX="227.0" layoutY="401.0" prefHeight="200.0" prefWidth="200.0" />
+                  <Label alignment="CENTER" layoutX="19.0" layoutY="595.0" prefHeight="84.0" prefWidth="548.0" style="-fx-text-fill: #FFFFFF;" text="Select the order  columns you want to export in the csv" textAlignment="CENTER">
+                     <font>
+                        <Font name="Georgia Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

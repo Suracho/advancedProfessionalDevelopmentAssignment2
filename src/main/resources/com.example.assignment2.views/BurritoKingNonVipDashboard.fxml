@@ -56,7 +56,7 @@
                         <Font name="Georgia Bold Italic" size="23.0" />
                      </font>
                   </Label>
-                  <Button id="loginButton" fx:id="editProfile" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="502.0" mnemonicParsing="false" onMouseClicked="#proceedToEditProfileScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Edit Profile">
+                  <Button id="loginButton" fx:id="editProfile" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="502.0" mnemonicParsing="false" onAction="#proceedToEditProfileScreen" onMouseClicked="#proceedToEditProfileScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Edit Profile">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
@@ -99,6 +99,11 @@
                         <Font name="Georgia Bold" size="23.0" />
                      </font>
                   </Label>
+                  <Button id="loginButton" fx:id="exportOrdersButton" alignment="CENTER" contentDisplay="CENTER" layoutX="260.0" layoutY="448.0" mnemonicParsing="false" onAction="#proceedToExportOrders" onMouseClicked="#switchToNonVipOrderDashboardScreen" prefHeight="35.0" prefWidth="159.0" style="-fx-border-radius: 1000;" styleClass="loginButton" stylesheets="@../views/BurritoKingCSS.css" text="Export Orders">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </items>

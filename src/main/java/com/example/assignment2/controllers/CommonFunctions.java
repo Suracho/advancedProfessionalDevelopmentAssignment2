@@ -27,6 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.time.LocalTime.now;
 
 // This is an abstract class which is extended by every screen, to access some common functions. This supports code reusability.
 abstract class CommonFunctions {
@@ -163,6 +167,12 @@ abstract class CommonFunctions {
         } else {
             changeScreen("/com.example.assignment2.views/BurritoKingNonVipDashboard.fxml");
         }
+    }
+
+    // Function to switch screen proceedTo export orders
+    @FXML
+    protected void proceedToExportOrders() throws Exception {
+        changeScreen("/com.example.assignment2.views/BurritoKingExportOrders.fxml");
     }
 
 
@@ -707,8 +717,15 @@ abstract class CommonFunctions {
         while (true){
             ButtonType bt = alert.showAndWait().get();
             if (bt == ButtonType.OK && !emailField.getText().isEmpty()){
-                System.out.println("YOU ARE VIP");
                 String emailAddress = emailField.getText();
+                if (!isEmailValid(emailAddress)){
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Invalid Email");
+                    errorAlert.setHeaderText("Invalid Email Format");
+                    errorAlert.setContentText("Please enter a correct email format.");
+                    errorAlert.showAndWait();
+                    continue;
+                }
                 updateVipStatusInUserAndInsertAVipUser(userId, emailAddress, isLoginPage);
                 insertCreditsForVip(userId);
                 return true;
@@ -772,15 +789,18 @@ abstract class CommonFunctions {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
+
             // User chose OK, prompt for new time
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+
             LocalTime newTime = null;
 
             while (newTime == null) {
                 TextInputDialog dialog = new TextInputDialog(formattedTime);
                 dialog.setTitle("Enter New Time");
                 dialog.setHeaderText("Change Time");
-                dialog.setContentText("Please enter the new time (HH:mm), example 23:23");
+                dialog.setContentText("Please enter the new time (HH:mm), example 03:23 in 24 hr format without the AM or PM");
 
                 Optional<String> newTimeResult = dialog.showAndWait();
 
@@ -792,7 +812,7 @@ abstract class CommonFunctions {
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.setTitle("Invalid Time Format");
                         errorAlert.setHeaderText(null);
-                        errorAlert.setContentText("The time you entered is not valid. Please enter the time in HH:mm format.");
+                        errorAlert.setContentText("The time you entered is not valid. Please enter the time in  24 hr format without the AM or PM");
                         errorAlert.showAndWait();
                     }
                 } else {
@@ -848,6 +868,23 @@ abstract class CommonFunctions {
 
         int credits = minusCredits(creditsEarned, userId);
         updateCreditsAfterRedemption(credits);
+    }
+
+    // email validator
+    protected boolean isEmailValid(String email){
+        // Regular expression for validating an Email
+        final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        // Compile the ReGex
+        Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+        if (email == null) {
+            return false;
+        }
+
+        Matcher matcher = EMAIL_PATTERN.matcher(email);
+        return matcher.matches();
     }
 
 

@@ -121,9 +121,8 @@ public class BurritoKingPaymentScreenController extends CommonFunctions{
             return;
         }
 
-
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a"); // Use 'a' for AM/PM
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a"); // Use 'a' for AM/PM
         String formattedTime = formatter.format(now);
         LocalTime lt = showConfirmationAlertForFetchingCurrentTime("Time Confirmation", "The time right now is " + formattedTime + ". Please enter the time the order was placed at.", formattedTime);
         String formattedLt = lt.toString();
