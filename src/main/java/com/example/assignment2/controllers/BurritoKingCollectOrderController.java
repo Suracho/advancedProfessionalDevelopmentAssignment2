@@ -1,8 +1,8 @@
 package com.example.assignment2.controllers;
 
 import com.example.assignment2.models.ActionButtonTableCell;
+import com.example.assignment2.models.DaoOrders;
 import com.example.assignment2.models.OrderStatus;
-import com.example.assignment2.models.Orders;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableCell;
@@ -18,22 +18,22 @@ import java.util.function.Consumer;
 // This is the controller class for Collect order View
 public class BurritoKingCollectOrderController extends CommonFunctions {
     @FXML
-    private TableView<Orders> collectOrderTable;
+    private TableView<DaoOrders> collectOrderTable;
 
     @FXML
-    private TableColumn<Orders, Integer> orderIdColumn;
+    private TableColumn<DaoOrders, Integer> orderIdColumn;
 
     @FXML
-    private TableColumn<Orders, String> orderSummaryColumn;
+    private TableColumn<DaoOrders, String> orderSummaryColumn;
 
     @FXML
-    private TableColumn<Orders, Double> totalPriceColumn;
+    private TableColumn<DaoOrders, Double> totalPriceColumn;
 
     @FXML
-    private TableColumn<Orders, Void> collectOrderColumn;
+    private TableColumn<DaoOrders, Void> collectOrderColumn;
 
     @FXML
-    private TableColumn<Orders, Void> cancelOrderColumn;
+    private TableColumn<DaoOrders, Void> cancelOrderColumn;
 
     @FXML
     public void initialize() {
@@ -68,14 +68,14 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
         // Add custom cell factory for collect and cancel columns
         collectOrderColumn.setCellFactory(new Callback<>() {
             @Override
-            public TableCell<Orders, Void> call(final TableColumn<Orders, Void> param) {
+            public TableCell<DaoOrders, Void> call(final TableColumn<DaoOrders, Void> param) {
                 return new ActionButtonTableCell(collectAction, "Collect");
             }
         });
 
         cancelOrderColumn.setCellFactory(new Callback<>() {
             @Override
-            public TableCell<Orders, Void> call(final TableColumn<Orders, Void> param) {
+            public TableCell<DaoOrders, Void> call(final TableColumn<DaoOrders, Void> param) {
                 return new ActionButtonTableCell(cancelAction, "Cancel");
             }
         });
@@ -85,7 +85,9 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
     }
 
     private void refreshTable() {
-        ObservableList<Orders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
+        ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
+
+        orders.sort(DaoOrders::compareByDayTime);
         collectOrderTable.setItems(orders);
     }
 }

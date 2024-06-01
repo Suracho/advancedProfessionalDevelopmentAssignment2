@@ -22,33 +22,35 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
     private ListView<OrderColumnCheckBox> orderColumnsListView;
 
     @FXML
-    private TableView<Orders> orderSummaryTable;
+    private TableView<DaoOrders> orderSummaryTable;
 
     // Table columns
     @FXML
-    private TableColumn<Orders, Integer> orderIdColumn;
+    private TableColumn<DaoOrders, Integer> orderIdColumn;
 
     @FXML
-    private TableColumn<Orders, String> dayColumn;
+    private TableColumn<DaoOrders, String> dayColumn;
 
     @FXML
-    private TableColumn<Orders, Double> totalPriceColumn;
+    private TableColumn<DaoOrders, Double> totalPriceColumn;
 
     @FXML
-    private TableColumn<Orders, String> orderStatusColumn;
+    private TableColumn<DaoOrders, String> orderStatusColumn;
 
     @FXML
-    private TableColumn<Orders, Void> selectCheckboxesColumn; // Column for checkboxes
+    private TableColumn<DaoOrders, Void> selectCheckboxesColumn; // Column for checkboxes
 
     private final ObservableList<Integer> selectedOrderIds = FXCollections.observableArrayList(); // List to keep track of selected order IDs
 
-    private ObservableList<Orders> orders;
+    private ObservableList<DaoOrders> orders;
 
     // Method to initialize the controller
     @FXML
     public void initialize() {
         // Get orders and set up the table
         this.orders = getOrdersByStatusAndUserID("");
+
+        this.orders.sort((o1, o2) -> o2.getOrderId() - o1.getOrderId());
 
         // Set up the table columns with appropriate properties
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
@@ -98,13 +100,13 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
 
     // Method to add checkboxes to the table column
     private void addCheckboxesToTable() {
-        selectCheckboxesColumn.setCellFactory(column -> new TableCell<Orders, Void>() {
+        selectCheckboxesColumn.setCellFactory(column -> new TableCell<DaoOrders, Void>() {
             private final CheckBox checkBox = new CheckBox(); // Create a new CheckBox
 
             {
                 // Event listener for the CheckBox
                 checkBox.setOnAction(event -> {
-                    Orders order = getTableView().getItems().get(getIndex()); // Get the current order
+                    DaoOrders order = getTableView().getItems().get(getIndex()); // Get the current order
                     if (checkBox.isSelected()) {
                         selectedOrderIds.add(order.getOrderId()); // Add order ID to selected list if checked
                     } else {
@@ -144,7 +146,7 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
     // Method to process the selected order IDs and columns
     private void processSelectedItems(ObservableList<Integer> selectedOrderIds, ObservableList<OrderColumnCheckBox> selectedOrderColumns) {
         // Filter orders based on selected IDs
-        List<Orders> filteredOrders = orders.stream()
+        List<DaoOrders> filteredOrders = orders.stream()
                 .filter(order -> selectedOrderIds.contains(order.getOrderId()))
                 .collect(Collectors.toList());
 
@@ -153,7 +155,7 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
     }
 
     // Method to export orders to CSV
-    private void exportOrdersToCSV(List<Orders> filteredOrders, ObservableList<OrderColumnCheckBox> selectedOrderColumns) {
+    private void exportOrdersToCSV(List<DaoOrders> filteredOrders, ObservableList<OrderColumnCheckBox> selectedOrderColumns) {
         // File chooser for getting path
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File");
@@ -176,7 +178,7 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
                 writer.append("\n");
 
                 // Write order data
-                for (Orders order : filteredOrders) {
+                for (DaoOrders order : filteredOrders) {
                     for (OrderColumnCheckBox columnCheckBox : selectedOrderColumns) {
                         switch (columnCheckBox.getColumnName()) {
                             case "Order Id":

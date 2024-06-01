@@ -49,7 +49,7 @@ abstract class CommonFunctions {
 
     // Method to change screens and pass data to the controller
     @FXML
-    private void changeScreenWithController(String fxmlFile, String data, Double paymentAmount) throws IOException {
+    private void changeScreenWithController(String fxmlFile, String data, Double paymentAmount, Double waitingTime) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -60,7 +60,7 @@ abstract class CommonFunctions {
         // Pass data to the controller
         Object controller = fxmlLoader.getController();
         if (controller instanceof BurritoKingCartController) {
-            ((BurritoKingCartController) controller).initData(data, paymentAmount);
+            ((BurritoKingCartController) controller).initData(data, paymentAmount, waitingTime);
         }
     }
 
@@ -83,8 +83,8 @@ abstract class CommonFunctions {
 
     // Function to switch screen proceedToHome
     @FXML
-    protected void proceedToCartScreen(String summaryText, Double paymentAmount) throws IOException {
-        changeScreenWithController("/com.example.assignment2.views/BurritoKingCart.fxml", summaryText, paymentAmount);
+    protected void proceedToCartScreen(String summaryText, Double paymentAmount, Double waitingTime) throws IOException {
+        changeScreenWithController("/com.example.assignment2.views/BurritoKingCart.fxml", summaryText, paymentAmount, waitingTime);
     }
 
     // Function to switch screen proceedToViewAllOrders
@@ -259,12 +259,12 @@ abstract class CommonFunctions {
     protected ObservableList<Food> getFoodItems() {
         ObservableList<Food> foodItems = FXCollections.observableArrayList();
         User user = getIsLoggedInUser();
-        Orders orders = getOrderWithPendingPayment(user.getUserId());
+        DaoOrders daoOrders = getOrderWithPendingPayment(user.getUserId());
 
         try (Connection connection = BurritoKingApplication.connect()) {
             String query = "SELECT * FROM Food WHERE orderId=?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, orders.getOrderId());
+            statement.setInt(1, daoOrders.getOrderId());
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()){
@@ -292,8 +292,8 @@ abstract class CommonFunctions {
 
 
     // gets the pending payment order for the user
-    protected Orders getOrderWithPendingPayment(int userId){
-        Orders order = null;
+    protected DaoOrders getOrderWithPendingPayment(int userId){
+        DaoOrders order = null;
         String query = "SELECT * FROM Orders WHERE userId = ? AND pendingPayment = 1";
 
         try (Connection connection = BurritoKingApplication.connect();
@@ -303,7 +303,7 @@ abstract class CommonFunctions {
             ResultSet rs = statement.executeQuery();
 
             if (rs.next()) {
-                order = new Orders(
+                order = new DaoOrders(
                         rs.getDouble("totalPrice"),
                         rs.getDouble("waitingTime"),
                         Objects.equals(rs.getString("pendingPayment"), "1"),
@@ -327,7 +327,7 @@ abstract class CommonFunctions {
         return order;
     }
 
-    protected List<Food> getFoodListForOrders(Orders order) {
+    protected List<Food> getFoodListForOrders(DaoOrders order) {
         List<Food> foodList = new ArrayList<Food>();
 
         String query = "SELECT * FROM Food WHERE orderId = ?";
@@ -358,8 +358,8 @@ abstract class CommonFunctions {
     }
 
     // gets all the orders by status and userId. if status is "" then it fetches all the orders irrespective of the orderStatus
-    protected ObservableList<Orders> getOrdersByStatusAndUserID(String status){
-        ObservableList<Orders> orders = FXCollections.observableArrayList();
+    protected ObservableList<DaoOrders> getOrdersByStatusAndUserID(String status){
+        ObservableList<DaoOrders> orders = FXCollections.observableArrayList();
         int userId = getIsLoggedInUserId();
 
         String query;
@@ -382,7 +382,7 @@ abstract class CommonFunctions {
 
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                Orders order = new Orders(
+                DaoOrders order = new DaoOrders(
                         rs.getDouble("totalPrice"),
                         rs.getDouble("waitingTime"),
                         Objects.equals(rs.getString("pendingPayment"), "1"),
@@ -513,11 +513,11 @@ abstract class CommonFunctions {
 
         String query;
         PreparedStatement statement;
-        Orders orders = getOrderWithPendingPayment(loggedInUser.getUserId());
+        DaoOrders daoOrders = getOrderWithPendingPayment(loggedInUser.getUserId());
 
 
         try (Connection connection = BurritoKingApplication.connect()) {
-            if (orders == null){
+            if (daoOrders == null){
                 query = "INSERT INTO Orders(userId, pendingPayment, totalPrice, waitingTime, summaryText) VALUES(?, ?, ?, ?, ?)";
                 assert connection != null;
                 statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -535,7 +535,7 @@ abstract class CommonFunctions {
                 statement.setDouble(3, totalPrice);
                 statement.setDouble(4, waitingTime);
                 statement.setString(5, summaryText);
-                statement.setInt(6, orders.getOrderId());
+                statement.setInt(6, daoOrders.getOrderId());
             }
 
 
@@ -558,8 +558,8 @@ abstract class CommonFunctions {
                     LocalDateTime.now() + ": " + e.getMessage());
         }
 
-        if (orders != null){
-            return orders.getOrderId();
+        if (daoOrders != null){
+            return daoOrders.getOrderId();
         } else {
             return orderId;
         }
@@ -574,8 +574,8 @@ abstract class CommonFunctions {
 
         LinkedList<FoodItem> individualFoodItems = order.getItems();
 
-        Orders orders = getOrderWithPendingPayment(loggedInUser.getUserId());
-        List<FoodType> foodTypeListPresentInDB = isFoodPresent(orders);
+        DaoOrders daoOrders = getOrderWithPendingPayment(loggedInUser.getUserId());
+        List<FoodType> foodTypeListPresentInDB = isFoodPresent(daoOrders);
         List<FoodType> foodTypeList = getFoodList();
         PreparedStatement statement;
 
@@ -588,7 +588,7 @@ abstract class CommonFunctions {
                     statement = connection.prepareStatement(query);
                     statement.setDouble(1,  foodItem.getTotalPrice());
                     statement.setInt(2,  foodItem.getQuantity());
-                    statement.setInt(3,  orders.getOrderId());
+                    statement.setInt(3,  daoOrders.getOrderId());
                     statement.setString(4,  foodType.toString());
                     foodTypeList.remove(foodType);
                 }  else {
@@ -647,9 +647,9 @@ abstract class CommonFunctions {
         // User chose OK, prompt for new time
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Get the order and calculate the maximum allowed collection time
-            Orders orders = getOrderByOrderId(orderId);
-            LocalTime timeOrdered = LocalTime.parse(orders.getTimeOrdered(), DateTimeFormatter.ofPattern("HH:mm"));
-            double waitingTimeInMinutes = orders.getWaitingTime(); // get waiting time in minutes
+            DaoOrders daoOrders = getOrderByOrderId(orderId);
+            LocalTime timeOrdered = LocalTime.parse(daoOrders.getTimeOrdered(), DateTimeFormatter.ofPattern("HH:mm"));
+            double waitingTimeInMinutes = daoOrders.getWaitingTime(); // get waiting time in minutes
             LocalTime minCollectTime = calculateCollectTime(timeOrdered, waitingTimeInMinutes);
 
             boolean validTimeEntered = false;
@@ -797,7 +797,7 @@ abstract class CommonFunctions {
             LocalTime newTime = null;
 
             while (newTime == null) {
-                TextInputDialog dialog = new TextInputDialog(formattedTime);
+                TextInputDialog dialog = new TextInputDialog("03:23");
                 dialog.setTitle("Enter New Time");
                 dialog.setHeaderText("Change Time");
                 dialog.setContentText("Please enter the new time (HH:mm), example 03:23 in 24 hr format without the AM or PM");
@@ -838,8 +838,8 @@ abstract class CommonFunctions {
         // calculates final paymentAmount
         Double finalPaymentAmount = calculatePaymentAmountAfterCreditsRedemption(credits, paymentAmount);
 
-        Orders orders =  getOrderWithPendingPayment(userId);
-        updateTotalPrice(finalPaymentAmount, orders.getOrderId());
+        DaoOrders daoOrders =  getOrderWithPendingPayment(userId);
+        updateTotalPrice(finalPaymentAmount, daoOrders.getOrderId());
 
         Integer creditsApplied = credits - (credits % 100);
 
@@ -848,23 +848,23 @@ abstract class CommonFunctions {
 
         updateCreditsAfterRedemption(finalCredits);
         // updates creditsApplied column in orders
-        updateCreditsAppliedInOrders(creditsApplied, orders.getOrderId());
+        updateCreditsAppliedInOrders(creditsApplied, daoOrders.getOrderId());
     }
 
     protected void refundCreditsAfterCancellation(int orderId) throws Exception {
         // gets the order for knowing the credits
-        Orders orders = getOrderByOrderId(orderId);
+        DaoOrders daoOrders = getOrderByOrderId(orderId);
 
-        Integer creditsApplied = orders.getCreditsApplied();
+        Integer creditsApplied = daoOrders.getCreditsApplied();
 
         updateCredits(creditsApplied);
     }
 
     protected void reduceOrderCreditsAfterCancellation(Integer orderId) throws Exception {
         int userId = getIsLoggedInUserId();
-        Orders orders = getOrderByOrderId(orderId);
+        DaoOrders daoOrders = getOrderByOrderId(orderId);
 
-        int creditsEarned = (int) Math.floor(orders.getTotalPrice());
+        int creditsEarned = (int) Math.floor(daoOrders.getTotalPrice());
 
         int credits = minusCredits(creditsEarned, userId);
         updateCreditsAfterRedemption(credits);
@@ -1021,8 +1021,8 @@ abstract class CommonFunctions {
     }
 
     // gets the pending payment order for the user
-    private Orders getOrderByOrderId(int orderId){
-        Orders order = null;
+    private DaoOrders getOrderByOrderId(int orderId){
+        DaoOrders order = null;
         String query = "SELECT * FROM Orders WHERE orderId = ?";
 
         try (Connection connection = BurritoKingApplication.connect();
@@ -1032,7 +1032,7 @@ abstract class CommonFunctions {
             ResultSet rs = statement.executeQuery();
 
             if (rs.next()) {
-                order = new Orders(
+                order = new DaoOrders(
                         rs.getDouble("totalPrice"),
                         rs.getDouble("waitingTime"),
                         Objects.equals(rs.getString("pendingPayment"), "1"),
@@ -1110,7 +1110,7 @@ abstract class CommonFunctions {
     }
 
     // function to check whether food data exists in the table for updating it or inserting it
-    private List<FoodType> isFoodPresent(Orders orders){
+    private List<FoodType> isFoodPresent(DaoOrders daoOrders){
         List<FoodType> foodTypePresentList= new ArrayList<>();
 
         // creates hashmap  with all the foodtype values set to false for now
@@ -1121,7 +1121,7 @@ abstract class CommonFunctions {
             String query = "SELECT * FROM Food WHERE orderId=?";
             assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, orders.getOrderId());
+            statement.setInt(1, daoOrders.getOrderId());
             ResultSet rs = statement.executeQuery();
             // deletes the list value if the food data is present in the database
             while (rs.next()){
@@ -1185,6 +1185,26 @@ abstract class CommonFunctions {
     // calculate payment amount after user clicks the redeem credits button
     private Double calculatePaymentAmountAfterCreditsRedemption(int credits, Double paymentAmount){
         return paymentAmount - (credits / 100);
+    }
+
+
+    // Implementation of the methods being tested
+
+    LocalTime calculateCollectTimeForTest(LocalTime timeOrdered, double waitingTimeInMinutes) {
+        Duration waitingDuration = Duration.ofMinutes((long) waitingTimeInMinutes);
+        return timeOrdered.plus(waitingDuration);
+    }
+
+    Integer addCreditsForTest(int credits, int initialCredits){
+        return credits += initialCredits;
+    }
+
+    Integer minusCreditsForTest(int credits, int initialCredits){
+        return initialCredits -= credits;
+    }
+
+    Double calculatePaymentAmountAfterCreditsRedemptionForTest(int credits, Double paymentAmount){
+        return paymentAmount - (credits / 100.0);
     }
 
 }

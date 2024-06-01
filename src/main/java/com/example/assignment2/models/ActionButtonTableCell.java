@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.function.Consumer;
 
-public class ActionButtonTableCell extends TableCell<Orders, Void> {
+public class ActionButtonTableCell extends TableCell<DaoOrders, Void> {
     private final Button button = new Button();
     private final HBox container = new HBox(200, button);
 
@@ -21,7 +21,7 @@ public class ActionButtonTableCell extends TableCell<Orders, Void> {
             button.setStyle("-fx-background-color: transparent;");
             // Add action listeners for the buttons
             button.setOnAction(event -> {
-                Orders order = getTableView().getItems().get(getIndex());
+                DaoOrders order = getTableView().getItems().get(getIndex());
                 action.accept(order.getOrderId());
             });
         } else {
@@ -31,7 +31,7 @@ public class ActionButtonTableCell extends TableCell<Orders, Void> {
             button.setGraphic(cancelIcon);
             button.setStyle("-fx-background-color: transparent;");
             button.setOnAction(event -> {
-                Orders order = getTableView().getItems().get(getIndex());
+                DaoOrders order = getTableView().getItems().get(getIndex());
                 action.accept(order.getOrderId());
             });
         }

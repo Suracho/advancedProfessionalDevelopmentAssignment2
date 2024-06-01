@@ -18,6 +18,7 @@ public class BurritoKingCartController extends CommonFunctions{
     private String st;
     // final payment amount variable
     private Double paymentAmount;
+    private Double waitingTime;
     // Table
     @FXML
     private TableView<Food> foodSummaryTable;
@@ -39,6 +40,9 @@ public class BurritoKingCartController extends CommonFunctions{
     @FXML
     private Label paymentSummaryLabel;
 
+    @FXML
+    private Label waitingTimeSummaryLabel;
+
 
     // initialize method to fetch the food items which the customer had ordered in the previous page.
     @FXML
@@ -55,15 +59,34 @@ public class BurritoKingCartController extends CommonFunctions{
     }
 
     // Method to receive data from previous scene
-    public void initData(String summaryText, Double paymentAmount) {
+    public void initData(String summaryText, Double paymentAmount, Double waitingTime) {
         st = summaryText;
         paymentSummaryLabel.setText(st);
         this.paymentAmount = paymentAmount;
+
+        this.waitingTime = waitingTime;
+        waitingTimeSummaryLabel.setText("Estimated waiting time: " + convertToHoursAndMinutes(this.waitingTime));
     }
+
+
 
     // Function to switch screen payment screen
     @FXML
     protected void proceedToPaymentScreen() throws Exception {
         changeScreen((int) Math.floor(this.paymentAmount), this.paymentAmount);
+    }
+
+    //    function to convert double value to hours and minutes
+    private String convertToHoursAndMinutes(Double time) {
+        int hours = (int) Math.floor(time / 60);
+        int minutes = (int) Math.floor(time % 60);
+        return hours + " hours " + minutes + " minutes";
+    }
+
+    //    function to convert double value to hours and minutes
+    String convertToHoursAndMinutesForTest(Double time) {
+        int hours = (int) Math.floor(time / 60);
+        int minutes = (int) Math.floor(time % 60);
+        return hours + " hours " + minutes + " minutes";
     }
 }

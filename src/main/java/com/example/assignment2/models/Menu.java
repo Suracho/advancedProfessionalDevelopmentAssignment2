@@ -148,10 +148,10 @@ public class Menu {
     		String foodClass = item.getClass().getName();
 			System.out.println(foodClass);
             switch (foodClass) {
-                case "com.example.assignment2.models.Burrito" -> sb.append("burrito(s) ");
+                case "com.example.assignment2.models.Burrito" -> sb.append("burrito's ");
                 case "com.example.assignment2.models.Fries" -> sb.append("fries ");
                 case "com.example.assignment2.models.Soda" -> sb.append("soda ");
-                case "com.example.assignment2.models.Meal" -> sb.append("meal(s) ");
+                case "com.example.assignment2.models.Meal" -> sb.append("meal's ");
             }
     		if (i < this.activeOrder.getItems().size()-1) {
     			sb.append("and ");

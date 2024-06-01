@@ -1,7 +1,10 @@
 package com.example.assignment2.models;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 //This is the class for Order Entity in the database
-public class Orders {
+public class DaoOrders {
     private Double totalPrice;
     private Double waitingTime;
     private boolean pendingPayment;
@@ -15,8 +18,23 @@ public class Orders {
     private String summaryText;
     private Integer creditsApplied;
 
+    // custom sorter for orders
+    public static int compareByDayTime(DaoOrders o1, DaoOrders o2) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        LocalDate date1 = LocalDate.parse(o1.getDayOrdered(), formatter);
+        LocalDate date2 = LocalDate.parse(o2.getDayOrdered(), formatter);
+        int dateCompare = date1.compareTo(date2);
+        if (dateCompare != 0) {
+            return dateCompare;
+        } else {
+            LocalTime time1 = LocalTime.parse(o1.getTimeOrdered());
+            LocalTime time2 = LocalTime.parse(o2.getTimeOrdered());
+            return time2.compareTo(time1);  // Descending order for time (latest first)
+        }
+    }
 
-    public Orders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText, Integer creditsApplied) {
+
+    public DaoOrders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText, Integer creditsApplied) {
         this.totalPrice = totalPrice;
         this.waitingTime = waitingTime;
         this.pendingPayment = pendingPayment;
@@ -118,4 +136,6 @@ public class Orders {
     public void setCreditsApplied(Integer creditsApplied) {
         this.creditsApplied = creditsApplied;
     }
+
+
 }

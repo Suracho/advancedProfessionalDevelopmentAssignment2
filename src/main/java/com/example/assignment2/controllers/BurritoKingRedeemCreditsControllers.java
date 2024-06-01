@@ -1,16 +1,11 @@
 package com.example.assignment2.controllers;
 
 import com.example.assignment2.models.Credits;
-import com.example.assignment2.models.OrderStatus;
-import com.example.assignment2.models.Orders;
+import com.example.assignment2.models.DaoOrders;
 import com.example.assignment2.models.User;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.io.IOException;
 
 public class BurritoKingRedeemCreditsControllers extends CommonFunctions{
 
@@ -68,8 +63,8 @@ public class BurritoKingRedeemCreditsControllers extends CommonFunctions{
         Credits credits = getCreditsForUser(userId);
         setCredits(credits);
 
-        Orders orders = getOrderWithPendingPayment(userId);
-        this.setPaymentAmount(orders.getTotalPrice());
+        DaoOrders daoOrders = getOrderWithPendingPayment(userId);
+        this.setPaymentAmount(daoOrders.getTotalPrice());
         creditsNumberLabel.setText("Credits: " + this.credits.getCredits().toString() + " and your final payment amount is " + this.paymentAmount);
     }
 

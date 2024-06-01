@@ -1,8 +1,8 @@
 package com.example.assignment2.controllers;
 
 import com.example.assignment2.models.Credits;
+import com.example.assignment2.models.DaoOrders;
 import com.example.assignment2.models.OrderStatus;
-import com.example.assignment2.models.Orders;
 import com.example.assignment2.models.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,32 +23,34 @@ public class BurritoKingVipDashboardController extends CommonFunctions{
 
     // Table
     @FXML
-    private TableView<Orders> orderSummaryTable;
+    private TableView<DaoOrders> orderSummaryTable;
 
     // Columns
     @FXML
-    private TableColumn<Orders, Integer> orderIdColumn;
+    private TableColumn<DaoOrders, Integer> orderIdColumn;
 
     @FXML
-    private TableColumn<Orders, String> orderSummaryColumn;
+    private TableColumn<DaoOrders, String> orderSummaryColumn;
 
     @FXML
-    private TableColumn<Orders, Double> totalPriceColumn;
+    private TableColumn<DaoOrders, Double> totalPriceColumn;
 
     @FXML
-    private TableColumn<Orders, String> orderStatusColumn;
+    private TableColumn<DaoOrders, String> orderStatusColumn;
 
     @FXML
     public void initialize() {
         setInputFieldsValues();
 
         // gets order which are awaiting collection and sets the table
-        ObservableList<Orders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
+        ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
 
-        orderIdColumn.setCellValueFactory(new PropertyValueFactory<Orders, Integer>("orderId"));
-        orderSummaryColumn.setCellValueFactory(new PropertyValueFactory<Orders, String>("summaryText"));
-        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<Orders, Double>("totalPrice"));
-        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<Orders, String>("orderStatus"));
+        orders.sort(DaoOrders::compareByDayTime);
+
+        orderIdColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, Integer>("orderId"));
+        orderSummaryColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, String>("summaryText"));
+        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, Double>("totalPrice"));
+        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, String>("orderStatus"));
 
         orderSummaryTable.setItems(orders);
     }

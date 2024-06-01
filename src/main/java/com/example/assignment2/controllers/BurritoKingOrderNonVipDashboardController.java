@@ -46,7 +46,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
         List<Food> foodList;
         addTextFieldListeners();
         int userId = getIsLoggedInUser().getUserId();
-        Orders order = getOrderWithPendingPayment(userId);
+        DaoOrders order = getOrderWithPendingPayment(userId);
         if (order == null){
             setCounts(false, null);
         } else {
@@ -147,7 +147,7 @@ public class BurritoKingOrderNonVipDashboardController extends CommonFunctions {
 
         int orderId = upsertOrderInDb(totalPrice, waitingTime, summaryText);
         upsertFoodItemsInDb(order, orderId);
-        proceedToCartScreen(summaryText, totalPrice);
+        proceedToCartScreen(summaryText, totalPrice, waitingTime);
     }
 
     // Disables the plus button if the label's text is "100".
