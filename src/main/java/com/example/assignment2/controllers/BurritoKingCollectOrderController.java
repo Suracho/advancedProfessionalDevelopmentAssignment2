@@ -58,7 +58,6 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
                 if (checkIsVip(getIsLoggedInUser().getUserId())){
                     refundCreditsAfterCancellation(orderId);
                     reduceOrderCreditsAfterCancellation(orderId);
-                    throw new RuntimeException("Problem in cancelling and refunding the order");
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
