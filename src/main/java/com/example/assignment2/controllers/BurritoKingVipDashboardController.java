@@ -11,6 +11,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class BurritoKingVipDashboardController extends CommonFunctions{
     @FXML
     private Label firstName;
@@ -45,7 +49,26 @@ public class BurritoKingVipDashboardController extends CommonFunctions{
         // gets order which are awaiting collection and sets the table
         ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
 
+//        // Sort by day and then by time
+//        orders.sort((o1, o2) -> {
+//            // Parse day order strings to LocalDate objects for comparison
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+//            LocalDate date1 = LocalDate.parse(o1.getDayOrdered(), formatter);
+//            LocalDate date2 = LocalDate.parse(o2.getDayOrdered(), formatter);
+//
+//            int dateCompare = date1.compareTo(date2);
+//            if (dateCompare != 0) {
+//                return dateCompare;
+//            } else {
+//                // Parse time strings to LocalTime for comparison
+//                LocalTime time1 = LocalTime.parse(o1.getTimeOrdered());
+//                LocalTime time2 = LocalTime.parse(o2.getTimeOrdered());
+//                return time2.compareTo(time1);  // Descending order for time (latest first)
+//            }
+//        });
+
         orders.sort(DaoOrders::compareByDayTime);
+
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, Integer>("orderId"));
         orderSummaryColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, String>("summaryText"));

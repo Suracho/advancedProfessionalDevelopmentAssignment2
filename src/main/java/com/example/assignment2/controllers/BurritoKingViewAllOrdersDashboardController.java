@@ -7,6 +7,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 // this is the controller class for View All Order Page
 public class BurritoKingViewAllOrdersDashboardController extends CommonFunctions{
 
@@ -38,6 +42,7 @@ public class BurritoKingViewAllOrdersDashboardController extends CommonFunctions
         ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID("");
 
         orders.sort(DaoOrders::compareByDayTime);
+
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, Integer>("orderId"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, String>("timeOrdered"));

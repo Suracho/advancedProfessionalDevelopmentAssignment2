@@ -11,7 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
@@ -48,6 +50,7 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
             String displayedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
             showConfirmationAlertDuringCollection(displayedTime, orderId);
             updateOrderStatus(OrderStatus.COLLECTED.toString(), orderId);
+            showConfirmationAlert("Order Collected", "Order has been collected successfully");
             refreshTable();
         };
 
@@ -62,6 +65,7 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            showConfirmationAlert("Order Cancelled", "Order has been cancelled successfully");
             refreshTable();
         };
 
@@ -88,6 +92,7 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
         ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
 
         orders.sort(DaoOrders::compareByDayTime);
+
         collectOrderTable.setItems(orders);
     }
 }

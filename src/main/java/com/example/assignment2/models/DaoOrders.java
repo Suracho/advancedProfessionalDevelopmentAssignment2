@@ -20,18 +20,23 @@ public class DaoOrders {
 
     // custom sorter for orders
     public static int compareByDayTime(DaoOrders o1, DaoOrders o2) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        LocalDate date1 = LocalDate.parse(o1.getDayOrdered(), formatter);
-        LocalDate date2 = LocalDate.parse(o2.getDayOrdered(), formatter);
-        int dateCompare = date1.compareTo(date2);
-        if (dateCompare != 0) {
-            return dateCompare;
-        } else {
-            LocalTime time1 = LocalTime.parse(o1.getTimeOrdered());
-            LocalTime time2 = LocalTime.parse(o2.getTimeOrdered());
-            return time2.compareTo(time1);  // Descending order for time (latest first)
-        }
+            // Parse day order strings to LocalDate objects for comparison
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+            LocalDate date1 = LocalDate.parse(o1.getDayOrdered(), formatter);
+            LocalDate date2 = LocalDate.parse(o2.getDayOrdered(), formatter);
+
+            int dateCompare = date2.compareTo(date1); // Reversed order for dates (latest first)
+            if (dateCompare != 0) {
+                return dateCompare;
+            } else {
+                // Parse time strings to LocalTime for comparison
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                LocalTime time1 = LocalTime.parse(o1.getTimeOrdered(), timeFormatter);
+                LocalTime time2 = LocalTime.parse(o2.getTimeOrdered(), timeFormatter);
+                return time2.compareTo(time1);  // Descending order for time (latest first)
+            }
     }
+
 
 
     public DaoOrders(Double totalPrice, Double waitingTime, boolean pendingPayment, Integer orderId, Integer userId, String orderStatus, String timeOrdered, String dayOrdered, String collectionTime, String summaryText, Integer creditsApplied) {

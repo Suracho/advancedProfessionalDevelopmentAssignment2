@@ -77,8 +77,13 @@
                         <TableColumn fx:id="orderStatusColumn" minWidth="0.0" prefWidth="250.0" text="Order Status" />
                      </columns>
                   </TableView>
-                  <ListView fx:id="orderColumnsListView" layoutX="227.0" layoutY="401.0" prefHeight="200.0" prefWidth="200.0" />
-                  <Label alignment="CENTER" layoutX="19.0" layoutY="595.0" prefHeight="84.0" prefWidth="548.0" style="-fx-text-fill: #FFFFFF;" text="Select the order  columns you want to export in the csv" textAlignment="CENTER">
+                  <ListView fx:id="orderColumnsListView" layoutX="227.0" layoutY="369.0" prefHeight="200.0" prefWidth="200.0" />
+                  <Label alignment="CENTER" layoutX="27.0" layoutY="560.0" prefHeight="52.0" prefWidth="548.0" style="-fx-text-fill: #FFFFFF;" text="Select the order  columns you want to export in the csv" textAlignment="CENTER">
+                     <font>
+                        <Font name="Georgia Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="errorLabel" alignment="CENTER" layoutX="37.0" layoutY="622.0" prefHeight="52.0" prefWidth="548.0" style="-fx-text-fill: #FFFFFF;" textAlignment="CENTER">
                      <font>
                         <Font name="Georgia Bold" size="13.0" />
                      </font>

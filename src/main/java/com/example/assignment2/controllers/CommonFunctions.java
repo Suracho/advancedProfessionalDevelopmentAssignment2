@@ -327,6 +327,7 @@ abstract class CommonFunctions {
         return order;
     }
 
+    // gets the food list for the orderid
     protected List<Food> getFoodListForOrders(DaoOrders order) {
         List<Food> foodList = new ArrayList<Food>();
 
@@ -364,7 +365,7 @@ abstract class CommonFunctions {
 
         String query;
         if (status.isEmpty()){
-            query = "SELECT * FROM Orders WHERE userId = ?";
+            query = "SELECT * FROM Orders WHERE userId = ? AND pendingPayment = 0";
         } else {
             query = "SELECT * FROM Orders WHERE orderStatus = ? AND userId = ?";
         }

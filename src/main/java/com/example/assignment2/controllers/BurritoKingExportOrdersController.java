@@ -40,9 +40,14 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
     @FXML
     private TableColumn<DaoOrders, Void> selectCheckboxesColumn; // Column for checkboxes
 
+    @FXML
+    private Label errorLabel;
+
     private final ObservableList<Integer> selectedOrderIds = FXCollections.observableArrayList(); // List to keep track of selected order IDs
 
     private ObservableList<DaoOrders> orders;
+
+
 
     // Method to initialize the controller
     @FXML
@@ -149,6 +154,18 @@ public class BurritoKingExportOrdersController extends CommonFunctions {
         List<DaoOrders> filteredOrders = orders.stream()
                 .filter(order -> selectedOrderIds.contains(order.getOrderId()))
                 .collect(Collectors.toList());
+
+        // sets the error labels if no orders are selected
+        if (filteredOrders.isEmpty()) {
+            errorLabel.setText("No orders selected! Please select orders to export.");
+            return;
+        }
+
+        // sets the error label if no columns are selected
+        if (selectedOrderColumns.isEmpty()) {
+            errorLabel.setText("No columns selected! Please select columns to export.");
+            return;
+        }
 
         // Export filtered orders to CSV
         exportOrdersToCSV(filteredOrders, selectedOrderColumns);

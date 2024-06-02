@@ -12,6 +12,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 // This is the Controller class for managing the Burrito King Non-VIP Dashboard. It contains logic for buttons and table for orders
 public class BurritoKingNonVipDashboardController extends CommonFunctions{
@@ -46,7 +49,9 @@ public class BurritoKingNonVipDashboardController extends CommonFunctions{
         // gets order which are awaiting collection and sets the table
         ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
 
+        // Sort by day and then by time
         orders.sort(DaoOrders::compareByDayTime);
+
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, Integer>("orderId"));
         orderSummaryColumn.setCellValueFactory(new PropertyValueFactory<DaoOrders, String>("summaryText"));
