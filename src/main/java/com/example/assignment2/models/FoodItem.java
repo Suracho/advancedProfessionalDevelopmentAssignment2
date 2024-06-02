@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// this is the class for fooditems
 public class FoodItem {
 	private double unitPrice;
 	private int quantity;

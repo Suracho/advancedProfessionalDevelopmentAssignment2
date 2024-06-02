@@ -11,32 +11,30 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
-// This is the controller class for Collect order View
+// This is the controller class for the Collect Order view
 public class BurritoKingCollectOrderController extends CommonFunctions {
+
+    // TableView for displaying orders
     @FXML
     private TableView<DaoOrders> collectOrderTable;
 
+    // Table columns
     @FXML
     private TableColumn<DaoOrders, Integer> orderIdColumn;
-
     @FXML
     private TableColumn<DaoOrders, String> orderSummaryColumn;
-
     @FXML
     private TableColumn<DaoOrders, Double> totalPriceColumn;
-
     @FXML
     private TableColumn<DaoOrders, Void> collectOrderColumn;
-
     @FXML
     private TableColumn<DaoOrders, Void> cancelOrderColumn;
 
+    // Initialize method to set up the table and its columns
     @FXML
     public void initialize() {
         // Initialize columns
@@ -46,7 +44,7 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
 
         // Define actions for collect and cancel buttons
         Consumer<Integer> collectAction = orderId -> {
-            // Handle collect order logic here
+            // Handle collect order logic
             String displayedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
             showConfirmationAlertDuringCollection(displayedTime, orderId);
             updateOrderStatus(OrderStatus.COLLECTED.toString(), orderId);
@@ -55,10 +53,10 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
         };
 
         Consumer<Integer> cancelAction = orderId -> {
-            // Handle cancel order logic here
+            // Handle cancel order logic
             updateOrderStatus(OrderStatus.CANCELLED.toString(), orderId);
             try {
-                if (checkIsVip(getIsLoggedInUser().getUserId())){
+                if (checkIsVip(getIsLoggedInUser().getUserId())) {
                     refundCreditsAfterCancellation(orderId);
                     reduceOrderCreditsAfterCancellation(orderId);
                 }
@@ -84,15 +82,14 @@ public class BurritoKingCollectOrderController extends CommonFunctions {
             }
         });
 
-        // Load data into table
+        // Load data into the table
         refreshTable();
     }
 
+    // Method to refresh the table with updated order data
     private void refreshTable() {
         ObservableList<DaoOrders> orders = getOrdersByStatusAndUserID(OrderStatus.AWAIT_FOR_COLLECTION.toString());
-
         orders.sort(DaoOrders::compareByDayTime);
-
         collectOrderTable.setItems(orders);
     }
 }

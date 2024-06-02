@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// burrito class
 public class Burrito extends FoodItem implements Cookable {
 	private static final int batchPrepTime = 9;
 	private static final int batchSize = 2;

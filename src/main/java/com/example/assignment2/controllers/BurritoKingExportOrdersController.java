@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// This is the controller class for the Export Orders view in the Burrito King application
 public class BurritoKingExportOrdersController extends CommonFunctions {
 
     // FXML references to the ListViews and TableView

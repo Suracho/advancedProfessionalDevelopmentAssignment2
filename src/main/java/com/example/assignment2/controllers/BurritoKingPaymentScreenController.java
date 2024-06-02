@@ -132,6 +132,4 @@ public class BurritoKingPaymentScreenController extends CommonFunctions{
         updateCredits(this.credits);
         proceedToHome();
     }
-
-
 }

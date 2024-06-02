@@ -5,12 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,7 +19,8 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BurritoKingLoginController extends CommonFunctions{
+// This is the controller class for the login screen in the Burrito King application
+public class BurritoKingLoginController extends CommonFunctions {
 
     @FXML
     private Label loginMessageLabel;
@@ -33,40 +31,38 @@ public class BurritoKingLoginController extends CommonFunctions{
     @FXML
     private TextField password;
 
-    // function to switch to registration screens without mouse event
+    // Function to switch to the dashboard screen based on VIP status
     @FXML
     protected void switchToDashboard(boolean isVip) throws IOException {
         FXMLLoader fxmlLoader;
-        if (isVip){
+        if (isVip) {
             fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingVipDashboard.fxml"));
         } else {
             fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingNonVipDashboard.fxml"));
         }
-
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
 
-    // function to switch to registration screens
+    // Function to switch to the registration screen
     @FXML
     protected void switchToRegistrationScreen(MouseEvent mouseEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BurritoKingApplication.class.getResource("/com.example.assignment2.views/BurritoKingRegistration.fxml"));
-
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
 
-    //method to ensure login button is clicked and display potential error messages
+    // Method to handle login button click and display potential error messages
     @FXML
-    protected void login(ActionEvent actionEvent){
+    protected void login(ActionEvent actionEvent) {
         String usernameIP = username.getText();
         String passwordIP = password.getText();
 
-        if (usernameIP.isEmpty() || passwordIP.isEmpty()){
+        if (usernameIP.isEmpty() || passwordIP.isEmpty()) {
             loginMessageLabel.setText("Please fill in all the details");
             return;
         } else {
@@ -76,33 +72,31 @@ public class BurritoKingLoginController extends CommonFunctions{
                 statement.setString(1, usernameIP);
                 ResultSet rs = statement.executeQuery();
 
-
-                if (!rs.next()){
+                if (!rs.next()) {
                     loginMessageLabel.setText("No such User exists");
                 } else {
-                        int userId = rs.getInt("userId");
-                        String username = rs.getString("username");
-                        String firstName = rs.getString("firstName");
-                        String lastName = rs.getString("lastName");
-                        String password = rs.getString("password");
-                        String isVipPermissionAsked = rs.getString("isVipPermissionAsked");
-                        connection.close();
+                    int userId = rs.getInt("userId");
+                    String username = rs.getString("username");
+                    String firstName = rs.getString("firstName");
+                    String lastName = rs.getString("lastName");
+                    String password = rs.getString("password");
+                    String isVipPermissionAsked = rs.getString("isVipPermissionAsked");
+                    connection.close();
 
-                        boolean isVip = checkIsVip(userId);
-                        boolean isVipSelected = isVip;
+                    boolean isVip = checkIsVip(userId);
+                    boolean isVipSelected = isVip;
 
-                        if (password.equals(passwordIP)){
-                            if (isVipPermissionAsked.equals("0")){
-                                isVipSelected = showIsVipAlert(userId, true);
-                            }
-                            setIsLoggedIn(userId, "1");
-                            setIsLoggedIn(userId, "0");
-                            setIsVipPermissionAsked(userId);
-                            switchToDashboard(isVipSelected);
-                        }else {
-                            loginMessageLabel.setText("Wrong password, please try again.");
+                    if (password.equals(passwordIP)) {
+                        if (isVipPermissionAsked.equals("0")) {
+                            isVipSelected = showIsVipAlert(userId, true);
                         }
-
+                        setIsLoggedIn(userId, "1");
+                        setIsLoggedIn(userId, "0");
+                        setIsVipPermissionAsked(userId);
+                        switchToDashboard(isVipSelected);
+                    } else {
+                        loginMessageLabel.setText("Wrong password, please try again.");
+                    }
                 }
             } catch (Exception e) {
                 Logger.getAnonymousLogger().log(
@@ -112,14 +106,11 @@ public class BurritoKingLoginController extends CommonFunctions{
         }
     }
 
-
-
-
-    // sets isLoggedIn to true for logged in user and false for everyone else
-    private void setIsLoggedIn(int userId, String zeroOrOne){
+    // Sets isLoggedIn to true for the logged-in user and false for everyone else
+    private void setIsLoggedIn(int userId, String zeroOrOne) {
         String query = "";
         try (Connection connection = BurritoKingApplication.connect()) {
-            if (zeroOrOne.equals("1")){
+            if (zeroOrOne.equals("1")) {
                 query = "UPDATE User SET isLoggedIn = ? WHERE userId = ?";
             } else {
                 query = "UPDATE User SET isLoggedIn = ? WHERE userId != ?";
@@ -128,8 +119,7 @@ public class BurritoKingLoginController extends CommonFunctions{
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, zeroOrOne);
             statement.setInt(2, userId);
-            int isUpdated = statement.executeUpdate();
-
+            statement.executeUpdate();
             connection.close();
         } catch (SQLException e) {
             Logger.getAnonymousLogger().log(
@@ -138,17 +128,14 @@ public class BurritoKingLoginController extends CommonFunctions{
         }
     }
 
-    // sets isVipPermissionAsked to true
-    private void setIsVipPermissionAsked(int userId){
+    // Sets isVipPermissionAsked to true
+    private void setIsVipPermissionAsked(int userId) {
         try (Connection connection = BurritoKingApplication.connect()) {
-
             String query = "UPDATE User SET isVipPermissionAsked = 1 WHERE userId = ?";
-
             assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, userId);
-            int isUpdated = statement.executeUpdate();
-
+            statement.executeUpdate();
             connection.close();
         } catch (SQLException e) {
             Logger.getAnonymousLogger().log(
@@ -156,5 +143,4 @@ public class BurritoKingLoginController extends CommonFunctions{
                     LocalDateTime.now() + ": " + e.getMessage());
         }
     }
-
 }

@@ -82,8 +82,4 @@ public class BurritoKingNonVipDashboardController extends CommonFunctions{
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
     }
-
-
-
-
 }

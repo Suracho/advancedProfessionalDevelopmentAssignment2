@@ -852,6 +852,7 @@ abstract class CommonFunctions {
         updateCreditsAppliedInOrders(creditsApplied, daoOrders.getOrderId());
     }
 
+    // method to refund the user the credits he used on the order which was cancelled
     protected void refundCreditsAfterCancellation(int orderId) throws Exception {
         // gets the order for knowing the credits
         DaoOrders daoOrders = getOrderByOrderId(orderId);
@@ -861,6 +862,7 @@ abstract class CommonFunctions {
         updateCredits(creditsApplied);
     }
 
+    // method to reduce the credits after the order is cancelled
     protected void reduceOrderCreditsAfterCancellation(Integer orderId) throws Exception {
         int userId = getIsLoggedInUserId();
         DaoOrders daoOrders = getOrderByOrderId(orderId);
@@ -1196,6 +1198,8 @@ abstract class CommonFunctions {
         return timeOrdered.plus(waitingDuration);
     }
 
+
+    // test methods for the functions being tested
     Integer addCreditsForTest(int credits, int initialCredits){
         return credits += initialCredits;
     }

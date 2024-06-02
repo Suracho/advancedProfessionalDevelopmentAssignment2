@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// model class for vip user
 public class VipUsers {
     private String emailAddress;
     private String vipUserId;

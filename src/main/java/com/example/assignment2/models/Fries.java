@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// this is the class for fries
 public class Fries extends FoodItem implements Cookable{
 	private static final int prepTimeForOneServe = 8;
 	private static final int batchSize = 5;

@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// class for credits
 public class Credits {
     private Integer credits;
     private Integer userId;

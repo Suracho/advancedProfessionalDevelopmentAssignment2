@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 
+// interface for cookable items
 public interface Cookable {
 	/**
 	 * The method to calculate the total preparation time of a food item
