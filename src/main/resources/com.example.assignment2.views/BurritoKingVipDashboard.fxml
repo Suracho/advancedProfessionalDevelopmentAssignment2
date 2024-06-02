@@ -94,7 +94,7 @@
                         <Font name="Georgia Bold Italic" size="23.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="65.0" layoutY="65.0" prefHeight="26.0" prefWidth="458.0" style="-fx-text-fill: #FFFFFF;" text="These daoOrders are awaiting Collection" textAlignment="CENTER" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="65.0" layoutY="65.0" prefHeight="26.0" prefWidth="458.0" style="-fx-text-fill: #FFFFFF;" text="These Orders are awaiting Collection" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="23.0" />
                      </font>
